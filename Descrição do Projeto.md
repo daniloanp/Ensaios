@@ -14,7 +14,8 @@ Eventualmente o projeto poderá sofrer uma extensão nas funcionalidades (e.g. s
 * Interface com dados estatísticos sobre o acesso e popularidade dos conteúdos disponibilizados pelos editores.
 
 #### Descrição da proposta de implementação
------------
+-----
+
 * Modelar a persistência utilizando o Modelo de Entidade e relacionamento. e implementar em um SGBD SQL;
 * Escrever um servidor HTTP que vai oferecer uma API RESTful com as funcionalidades descritas;
 * Escrever uma aplicação cliente Web que ofereça a camada de visualização do sistema;
