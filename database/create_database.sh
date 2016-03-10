@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 cd `dirname $0`
 
 echo
@@ -15,6 +16,11 @@ PSQL_PATH="psql"
 
 export PGPASSWORD="<password>"
 
-${PSQL_PATH} -w --quiet --file="./01-db_ddl.pg.sql" postgres postgres
+${PSQL_PATH} -w --quiet --file="00-create_database.pg.sql" postgres postgres;
+
+for x in `/usr/bin/ls -1 $1| grep -e [0-9][1-9].*pg[.]sql`; do
+    ${PSQL_PATH} -w --quiet --file="$x" ensaios postgres ;
+done
+
 
 unset pg_password
