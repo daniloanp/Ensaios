@@ -3,7 +3,6 @@
 
 SET search_path TO access_control;
 
-DROP TABLE IF EXISTS module;
 
 CREATE TABLE module (
     id     BIGSERIAL, --
@@ -16,7 +15,6 @@ CREATE TABLE module (
     CONSTRAINT parent_module_fk FOREIGN KEY (parent) REFERENCES module (id)
 );
 
-DROP TABLE IF EXISTS operation;
 CREATE TABLE operation (
     id     BIGSERIAL,
     name   VARCHAR(255), -- TODO:CHECK_IF_IS_URL_SAFE
@@ -27,15 +25,13 @@ CREATE TABLE operation (
     CONSTRAINT module_fk FOREIGN KEY (module) REFERENCES module (id)
 );
 
-DROP TABLE IF EXISTS permission;
 CREATE TABLE permission (
     id         BIGSERIAL,
-    descriptor VARCHAR(255),
+    description VARCHAR(255),
     -- table constraints
     CONSTRAINT permission_pk PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS operation_permission;
 CREATE TABLE operation_permission (
     operation  BIGINT NOT NULL,
     permission BIGINT NOT NULL,
@@ -45,18 +41,18 @@ CREATE TABLE operation_permission (
     CONSTRAINT operation_fk FOREIGN KEY (operation) REFERENCES operation (id)
 );
 
-DROP TABLE IF EXISTS "role";
+
 CREATE TABLE "role" (
     id         BIGSERIAL,
-    descriptor VARCHAR(255), -- just a mneumonic TODO:CHECK IF IS NECESSARY
+    description VARCHAR(255), -- just a mneumonic TODO:CHECK IF IS NECESSARY
     parent     BIGINT,
     -- table constraints
     CONSTRAINT role_pk PRIMARY KEY (id),
     CONSTRAINT parent_role_fk FOREIGN KEY (parent) REFERENCES "role" (id)
 );
 
-DROP TABLE IF EXISTS "role_permission";
-CREATE TABLE "role_permission" (
+
+CREATE TABLE role_permission (
     permission BIGINT NOT NULL,
     role       BIGINT NOT NULL,
     -- table constraints
