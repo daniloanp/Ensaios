@@ -1,9 +1,7 @@
 \set ON_ERROR_STOP
 \encoding utf8
 
-SET search_path TO access_control;
-
-
+SET search_path TO user_control;
 CREATE TABLE module (
     id     BIGSERIAL, --
     name   VARCHAR(255) NOT NULL, -- TODO:CHECK_IF_IS_URL_SAFE
@@ -61,10 +59,32 @@ CREATE TABLE role_permission (
     CONSTRAINT role_fk FOREIGN KEY (role) REFERENCES role (id)
 );
 
+CREATE TABLE user_account (
+    id              BIGSERIAL,
+    name            TEXT NOT NULL,
+    password        TEXT,
+    salt            TEXT,
+    create_datetime TEXT,
+    -- table constraints
+    CONSTRAINT name_unique UNIQUE (name),
+    CONSTRAINT user_account_pk PRIMARY KEY (id)
+);
 
+CREATE TABLE role_account (
+    user_account BIGINT NOT NULL,
+    role BIGINT NOT NULL,
+    -- table constraints
+    CONSTRAINT role_account_pk PRIMARY KEY (user_account, "role"),
+    CONSTRAINT user_account_fk FOREIGN KEY(user_account) REFERENCES user_account(id),
+    CONSTRAINT role_fk FOREIGN KEY(role) REFERENCES role(id)
+);
 
-
-
-
-
+CREATE TABLE user_session (
+    id TEXT NOT NULL,
+    user_account BIGINT NOT NULL,
+    role BIGINT NOT NULL,
+    -- table constraints
+    CONSTRAINT user_session_pk PRIMARY KEY (id),
+    CONSTRAINT role_account_fk FOREIGN KEY(user_account, role) REFERENCES role_account(user_account, role)
+);
 

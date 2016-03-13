@@ -25,9 +25,8 @@ SET client_min_messages TO WARNING;
 
 
 
-CREATE SCHEMA IF NOT EXISTS access_control; -- store permission over
-CREATE SCHEMA IF NOT EXISTS application_structure; -- store applications structure
-CREATE SCHEMA IF NOT EXISTS user_data; -- users information and login
+CREATE SCHEMA IF NOT EXISTS user_control; -- store permission over
+CREATE SCHEMA IF NOT EXISTS application_structure; -- store applications structures
 CREATE SCHEMA IF NOT EXISTS application_content;   -- content produced by users
 
 
