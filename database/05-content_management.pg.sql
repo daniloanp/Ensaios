@@ -91,7 +91,6 @@ CREATE TABLE article_revision_author_mapping (-- authors
     CONSTRAINT public_profile_fk FOREIGN KEY (public_profile_id) REFERENCES public_profile (id)
 );
 
-
 CREATE TABLE form (
     id    BIGSERIAL,
     title TEXT NOT NULL,
@@ -99,17 +98,17 @@ CREATE TABLE form (
     CONSTRAINT form_pk PRIMARY KEY (id)
 );
 
-CREATE TYPE form_field_type AS ENUM ('combobox', 'radiolist', 'checkbox', 'date', 'datetime', 'textfield', 'textarea');
+CREATE TYPE form_field_input_type AS ENUM ('combobox', 'radiolist', 'checkbox', 'date', 'datetime', 'textfield', 'textarea');
 CREATE TABLE form_field (
-    id      BIGSERIAL,
-    form_id BIGINT,
-    label   TEXT            NOT NULL,
-    type    form_field_type NOT NULL,
-    mask    TEXT    DEFAULT NULL,
-    options TEXT [] DEFAULT NULL, -- should be a
+    id         BIGSERIAL,
+    form_id    BIGINT,
+    label      TEXT                  NOT NULL,
+    input_type form_field_input_type NOT NULL,
+    mask       TEXT    DEFAULT NULL,
+    options    TEXT [] DEFAULT NULL, -- should be a
     -- table constraints
     CONSTRAINT form_field_pk PRIMARY KEY (id),
-    CONSTRAINT form_field_pk FOREIGN KEY (form_id) REFERENCES form (id)
+    CONSTRAINT form_field_fk FOREIGN KEY (form_id) REFERENCES form (id)
 );
 
 CREATE TABLE pool (
@@ -129,16 +128,25 @@ CREATE TABLE pool_step (
     previous_pool_step_id BIGINT DEFAULT NULL,
     -- table constraints
     CHECK (id != previous_pool_step_id),
+    CONSTRAINT pool_step_pk PRIMARY KEY (id),
+    UNIQUE (id, pool_id),
     UNIQUE (pool_id, previous_pool_step_id),
     UNIQUE (pool_id, form_id),
-    CONSTRAINT pool_step_pk PRIMARY KEY (id),
     CONSTRAINT form_fk FOREIGN KEY (form_id) REFERENCES form (id),
-    CONSTRAINT pool_fk FOREIGN KEY (pool_id) REFERENCES pool_step (id),
+    CONSTRAINT pool_fk FOREIGN KEY (pool_id) REFERENCES pool (id),
     CONSTRAINT previous_pool_step_fk FOREIGN KEY (previous_pool_step_id, pool_id) REFERENCES pool_step (id, pool_id)
 );
 
+CREATE TABLE pool_step_record (
+    id           BIGSERIAL,
+    pool_step_id BIGINT NOT NULL,
+    data         JSON DEFAULT NULL,
+    -- table constraints
+    CONSTRAINT pool_step_record_pk PRIMARY KEY (id),
+    CONSTRAINT pool_step_fk FOREIGN KEY (pool_step_id) REFERENCES pool_step (id)
+);
 
-CREATE TABLE file_node (
+CREATE TABLE file (
     id                      BIGSERIAL,
     name                    TEXT                        NOT NULL,
     mimetype                TEXT                        NOT NULL,
@@ -151,11 +159,23 @@ CREATE TABLE file_node (
     CONSTRAINT file_node_pk PRIMARY KEY (id)
 );
 
-
-CREATE TABLE file_link (
-
+CREATE TABLE page_layout (
+    full_page();
 );
 
-
+CREATE TABLE page_view (
+    id                      BIGSERIAL,
+    title                   TEXT,
+    description             TEXT,
+    layout                  TEXT, -- HTML
+    full_page_layout        TEXT, -- override HTML layout of a module;
+    creator_user_account_id BIGINT                      NOT NULL, -- user who created the node.
+    registration_datetime   TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
+    begin_datetime          TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
+    end_datetime            TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT NULL,
+    -- table constraints
+    CONSTRAINT publication_pk PRIMARY KEY (id),
+    CONSTRAINT creator_user_account_fk FOREIGN KEY (creator_user_account_id) REFERENCES users.user_account (id)
+);
 
 
