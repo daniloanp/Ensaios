@@ -61,33 +61,17 @@ CREATE TABLE user_current_emails (
     CONSTRAINT user_email_addresses_fk FOREIGN KEY (user_email_address, user_account_id) REFERENCES user_email (address, user_account_id)
 );
 
-CREATE TABLE user_public_profile_account (
-    -- table columns with their constraints
-    id                    BIGINT,
-    user_account_id       BIGINT                      NOT NULL,
-    name                  TEXT                        NOT NULL,
-    location              TEXT                                 DEFAULT NULL,
-    about                 TEXT                        NOT NULL,
-    registration_datetime TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
-    picture_id            BIGINT, -- missing picture image
-    -- table constraints
-    CONSTRAINT public_profile_account_pk PRIMARY KEY (id),
-    CONSTRAINT user_account_id_fk FOREIGN KEY (user_account_id) REFERENCES user_account (id)
-);
-
 -- table defines wich user_account is the current information;
 CREATE TABLE user_current_information (
     -- table columns with their constraints
     user_account_id              BIGINT NOT NULL,
     user_password_id             BIGINT DEFAULT NULL,
     user_personal_information_id BIGINT DEFAULT NULL,
-    user_public_profile_account_id  BIGINT DEFAULT NULL,
     -- table constraints
     CONSTRAINT user_account_uq PRIMARY KEY (user_account_id),
     CONSTRAINT user_email_address_uq UNIQUE (user_personal_information_id),
     CONSTRAINT user_account_fk FOREIGN KEY (user_account_id) REFERENCES user_account (id),
     CONSTRAINT user_personal_information_fk FOREIGN KEY (user_personal_information_id) REFERENCES user_personal_information (id),
-    CONSTRAINT user_public_profile_account_fk FOREIGN KEY (user_public_profile_account_id) REFERENCES user_public_profile_account (id),
     CONSTRAINT user_password_fk FOREIGN KEY (user_password_id, user_account_id) REFERENCES user_password (id, user_account_id)
     --     CONSTRAINT user_email_address_fk FOREIGN KEY (user_account_id, user_email_address) REFERENCES user_email (user_account_id, address)
 );

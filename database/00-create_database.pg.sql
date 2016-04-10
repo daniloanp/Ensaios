@@ -28,6 +28,7 @@ SET client_min_messages TO WARNING;
 CREATE SCHEMA IF NOT EXISTS permissions;
 CREATE SCHEMA IF NOT EXISTS users;
 CREATE SCHEMA IF NOT EXISTS session_management;
+CREATE SCHEMA IF NOT EXISTS content;
 
 
 
