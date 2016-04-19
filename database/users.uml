@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>ff21d194-1771-4660-8af4-80ea0ba67eab.SCHEMA:ensaios.users</OriginalElement>
+  <nodes>
+    <node x="210.07291666666663" y="155.0">ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_personal_information</node>
+    <node x="565.8229166666666" y="442.5">ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_current_emails</node>
+    <node x="393.07291666666663" y="0.0">ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_account</node>
+    <node x="476.07291666666663" y="203.0">ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_email</node>
+    <node x="212.76041666666663" y="430.0">ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_current_information</node>
+    <node x="5.072916666666629" y="191.0">ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_password</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_current_information" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_password">
+      <point x="-79.33333333333331" y="-52.5" />
+      <point x="252.42708333333331" y="405.0" />
+      <point x="97.57291666666663" y="405.0" />
+      <point x="0.0" y="76.5" />
+    </edge>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_password" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_account">
+      <point x="0.0" y="-76.5" />
+      <point x="97.57291666666663" y="125.0" />
+      <point x="407.57291666666663" y="125.0" />
+      <point x="-58.0" y="52.5" />
+    </edge>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_current_emails" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_account">
+      <point x="54.5" y="-40.0" />
+      <point x="729.3229166666666" y="405.0" />
+      <point x="744.5729166666666" y="405.0" />
+      <point x="744.5729166666666" y="125.0" />
+      <point x="523.5729166666666" y="125.0" />
+      <point x="58.0" y="52.5" />
+    </edge>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_email" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_account">
+      <point x="0.0" y="-64.5" />
+      <point x="605.0729166666666" y="135.0" />
+      <point x="494.57291666666663" y="135.0" />
+      <point x="29.0" y="52.5" />
+    </edge>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_personal_information" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_account">
+      <point x="0.0" y="-112.5" />
+      <point x="332.57291666666663" y="135.0" />
+      <point x="436.57291666666663" y="135.0" />
+      <point x="-29.0" y="52.5" />
+    </edge>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_current_emails" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_email">
+      <point x="-54.5" y="-40.0" />
+      <point x="620.3229166666666" y="405.0" />
+      <point x="605.0729166666666" y="405.0" />
+      <point x="0.0" y="64.5" />
+    </edge>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_current_information" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_personal_information">
+      <point x="0.0" y="-52.5" />
+      <point x="0.0" y="112.5" />
+    </edge>
+    <edge source="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_current_information" target="ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_account">
+      <point x="79.33333333333331" y="-52.5" />
+      <point x="411.09374999999994" y="405.0" />
+      <point x="465.57291666666663" y="405.0" />
+      <point x="0.0" y="52.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="403.0" y="267.5" />
+  <SelectedNodes>
+    <node>ff21d194-1771-4660-8af4-80ea0ba67eab.TABLE:ensaios.users.user_password</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+  </Categories>
+</Diagram>
+
