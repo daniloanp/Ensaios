@@ -9,7 +9,7 @@ CREATE TABLE user_session (
     role_id         BIGINT NOT NULL,
     -- missing browser and referer.
     -- table constraints
-    CONSTRAINT user_session_pk PRIMARY KEY (id),
-    CONSTRAINT user_account_fk FOREIGN KEY (user_account_id) REFERENCES users.user_account(id),
-    CONSTRAINT role_account_fk FOREIGN KEY (user_account_id, role_id) REFERENCES permissions.role_account_mapping (user_account_id, role_id)
+     PRIMARY KEY (id),
+     FOREIGN KEY (user_account_id) REFERENCES users.user_account(id),
+     FOREIGN KEY (user_account_id, role_id) REFERENCES controller.role_account_mapping (user_account_id, role_id)
 );

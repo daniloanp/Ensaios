@@ -10,8 +10,8 @@ CREATE TABLE user_account (
     username              TEXT                        NOT NULL,
     registration_datetime TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     -- table constraints
-    CONSTRAINT name_uq UNIQUE (username),
-    CONSTRAINT user_account_pk PRIMARY KEY (id)
+    UNIQUE (username),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE user_password (
@@ -22,9 +22,9 @@ CREATE TABLE user_password (
     salt                  TEXT                        NOT NULL,
     registration_datetime TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     -- table constraints
-    CONSTRAINT password_pk PRIMARY KEY (id),
-    CONSTRAINT password_uq UNIQUE (id, user_account_id), -- TODO:CHECK_BEST_WAY
-    CONSTRAINT user_fk FOREIGN KEY (user_account_id) REFERENCES user_account (id)
+    PRIMARY KEY (id),
+    UNIQUE (id, user_account_id), -- TODO:CHECK_BEST_WAY
+    FOREIGN KEY (user_account_id) REFERENCES user_account (id)
 );
 
 CREATE TABLE user_email (
@@ -34,8 +34,8 @@ CREATE TABLE user_email (
     verified              BOOLEAN                              DEFAULT FALSE,
     registration_datetime TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     -- table constraints
-    CONSTRAINT user_account_fk FOREIGN KEY (user_account_id) REFERENCES user_account (id),
-    CONSTRAINT user_email_address_pk PRIMARY KEY (user_account_id, address)
+    FOREIGN KEY (user_account_id) REFERENCES user_account (id),
+    PRIMARY KEY (user_account_id, address)
 );
 
 CREATE TABLE user_personal_information (
@@ -50,15 +50,15 @@ CREATE TABLE user_personal_information (
     registration_datetime TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     -- table constraints
     PRIMARY KEY (id),
-    CONSTRAINT user_account_fk FOREIGN KEY (user_account_id) REFERENCES user_account (id)
+    FOREIGN KEY (user_account_id) REFERENCES user_account (id)
 );
 
 CREATE TABLE user_current_emails (
     user_account_id    BIGINT NOT NULL,
     user_email_address VARCHAR(254),
-    CONSTRAINT user_account_fk FOREIGN KEY (user_account_id) REFERENCES user_account (id),
-    CONSTRAINT user_email_addresses_uq UNIQUE (user_email_address),
-    CONSTRAINT user_email_addresses_fk FOREIGN KEY (user_email_address, user_account_id) REFERENCES user_email (address, user_account_id)
+    FOREIGN KEY (user_account_id) REFERENCES user_account (id),
+    UNIQUE (user_email_address),
+    FOREIGN KEY (user_email_address, user_account_id) REFERENCES user_email (address, user_account_id)
 );
 
 -- table defines wich user_account is the current information;
@@ -68,10 +68,10 @@ CREATE TABLE user_current_information (
     user_password_id             BIGINT DEFAULT NULL,
     user_personal_information_id BIGINT DEFAULT NULL,
     -- table constraints
-    CONSTRAINT user_account_uq PRIMARY KEY (user_account_id),
-    CONSTRAINT user_email_address_uq UNIQUE (user_personal_information_id),
-    CONSTRAINT user_account_fk FOREIGN KEY (user_account_id) REFERENCES user_account (id),
-    CONSTRAINT user_personal_information_fk FOREIGN KEY (user_personal_information_id) REFERENCES user_personal_information (id),
-    CONSTRAINT user_password_fk FOREIGN KEY (user_password_id, user_account_id) REFERENCES user_password (id, user_account_id)
-    --     CONSTRAINT user_email_address_fk FOREIGN KEY (user_account_id, user_email_address) REFERENCES user_email (user_account_id, address)
+    PRIMARY KEY (user_account_id),
+    UNIQUE (user_personal_information_id),
+    FOREIGN KEY (user_account_id) REFERENCES user_account (id),
+    FOREIGN KEY (user_personal_information_id) REFERENCES user_personal_information (id),
+    FOREIGN KEY (user_password_id, user_account_id) REFERENCES user_password (id, user_account_id)
+    --      FOREIGN KEY (user_account_id, user_email_address) REFERENCES user_email (user_account_id, address)
 );
