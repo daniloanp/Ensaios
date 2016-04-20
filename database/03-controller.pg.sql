@@ -75,8 +75,3 @@ CREATE TABLE role_account_mapping (
      FOREIGN KEY (user_account_id) REFERENCES users.user_account (id),
      FOREIGN KEY (role_id) REFERENCES role (id)
 );
-
-
-
-
-

@@ -210,7 +210,7 @@ CREATE TABLE page_view_operation_mapping (
     PRIMARY KEY (page_view_id, operation_id),
     FOREIGN KEY (operation_id) REFERENCES controller.operation (id),
     FOREIGN KEY (page_view_id) REFERENCES page_view (id),
-    FOREIGN KEY (html_template_id) REFERENCES html_template(id)
+    FOREIGN KEY (html_template_id) REFERENCES html_template (id)
 );
 
 CREATE TABLE page_view_content_mapping (
@@ -225,7 +225,7 @@ CREATE TABLE page_view_content_mapping (
 );
 
 CREATE TABLE page_view_pool_mapping (
-    pool_id   BIGINT NOT NULL,
+    pool_id      BIGINT NOT NULL,
     page_view_id BIGINT NOT NULL,
     name         TEXT   NOT NULL,
     -- table constraints
@@ -235,4 +235,68 @@ CREATE TABLE page_view_pool_mapping (
     FOREIGN KEY (page_view_id) REFERENCES page_view (id)
 );
 
+CREATE TABLE menu (
+    id   BIGSERIAL NOT NULL,
+    name TEXT      NOT NULL,
+    -- table constraints,
+    PRIMARY KEY (id)
+);
 
+CREATE TABLE menu_item (
+    id           BIGSERIAL,
+    menu_id      BIGINT NOT NULL,
+    operation_id BIGINT DEFAULT NULL, -- giver us a url.
+    label        TEXT   NOT NULL,
+    -- table constraints
+    PRIMARY KEY (id),
+    FOREIGN KEY (menu_id) REFERENCES menu (id),
+    FOREIGN KEY (operation_id) REFERENCES controller.operation (id)
+);
+
+CREATE TABLE menu_item_sub_menu (
+    menu_item_id BIGINT NOT NULL,
+    menu_id      BIGINT NOT NULL,
+    -- table constraints
+    PRIMARY KEY (menu_item_id),
+    FOREIGN KEY (menu_item_id) REFERENCES menu_item (id),
+    FOREIGN KEY (menu_id) REFERENCES menu (id)
+);
+
+CREATE TABLE menu_page_view_mapping (
+    menu_id      BIGINT NOT NULL,
+    page_view_id BIGINT NOT NULL,
+    name         TEXT   NOT NULL,
+    -- table constraints
+    PRIMARY KEY (menu_id, page_view_id),
+    UNIQUE (page_view_id, name),
+    FOREIGN KEY (menu_id) REFERENCES menu (id),
+    FOREIGN KEY (page_view_id) REFERENCES page_view (id)
+);
+
+CREATE TABLE comment_section (
+    id BIGSERIAL NOT NULL,
+    -- table constraints
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE comment (
+    id                       BIGSERIAL NOT NULL,
+    author_public_profile_id BIGINT    NOT NULL,
+    comment_section_id       BIGINT DEFAULT NULL,
+    parent_comment_id        BIGINT DEFAULT NULL,
+    -- table constraints
+    PRIMARY KEY (id),
+    FOREIGN KEY (author_public_profile_id) REFERENCES public_profile (id),
+    FOREIGN KEY (comment_section_id) REFERENCES comment_section (id),
+    FOREIGN KEY (parent_comment_id) REFERENCES comment_section (id)
+);
+
+CREATE TABLE page_view_comment_section_mapping (
+    comment_section_id BIGINT DEFAULT NULL,
+    page_view_id BIGINT NOT NULL,
+    --table constraints
+    PRIMARY KEY (comment_section_id, page_view_id),
+    FOREIGN KEY (comment_section_id) REFERENCES comment_section(id),
+    FOREIGN KEY (page_view_id) REFERENCES page_view (id)
+
+);
