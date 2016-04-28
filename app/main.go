@@ -8,9 +8,9 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	mux.Handle("/static/",http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/static"))))
+	mux.Handle("/static/",http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/build/web/static"))))
 	mux.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
-		bytes, err := ioutil.ReadFile("./frontend/index.html")
+		bytes, err := ioutil.ReadFile("./frontend/build/web/index.html")
 		if (err != nil) {
 			w.Write([]byte("Erro!"))
 		} else {
