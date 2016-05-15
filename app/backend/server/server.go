@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"github.com/gorilla/mux"
-
 )
 
 func handlePrefix(mux *mux.Router, url string, handler http.Handler ) {
