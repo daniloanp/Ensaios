@@ -16,10 +16,9 @@ import 'package:angular2_tour_of_heroes/hero_detail_component.dart';
     <router-outlet></router-outlet>
 ''',
     directives: const [
-        HeroesComponent,
         ROUTER_DIRECTIVES,
     ],
-    providers: const [HeroService, ROUTER_PROVIDERS],
+    providers: const [ROUTER_PROVIDERS, HeroService],
     styleUrls: const ['app_component.css']
 )
 @RouteConfig(const [

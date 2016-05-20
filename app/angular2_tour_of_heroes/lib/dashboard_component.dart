@@ -28,10 +28,8 @@ class DashboardComponent implements OnInit {
 
     @override
     ngOnInit() async {
-        heroes = await _heroService.getHeroes().then( ( List<Hero> content) {
-                return content.sublist(0,5);
-            // ... do something else ...
-        });
+        final heroes = await _heroService.getHeroes();
+        this.heroes = heroes.sublist(1,5);
     }
 
     gotoDetail(Hero hero){

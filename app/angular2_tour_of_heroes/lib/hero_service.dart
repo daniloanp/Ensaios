@@ -10,13 +10,9 @@ class HeroService {
         return new Future.delayed(const Duration(seconds: 0), () => mockHeroes);
     }
 
-    Future<List<Hero>> getHeroes() async => this.getHeroesSlowly();
+    Future<List<Hero>> getHeroes() async => mockHeroes;
 
     Future<Hero> getHero(int id) async {
-         return getHeroes().then((heroes) {
-            heroes.singleWhere((hero){
-                return hero.id == id;
-            });
-         });
+         return (await getHeroes()).singleWhere((hero) => hero.id == id);
     }
 }

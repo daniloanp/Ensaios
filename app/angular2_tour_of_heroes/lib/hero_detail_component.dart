@@ -18,8 +18,14 @@ class HeroDetailComponent implements OnInit {
 
     @override
     ngOnInit() async {
-        final id = int.parse(_routeParams.get('id'));
-        this.hero = await _heroService.getHero(id);
+        String sid = _routeParams.get('id');
+//        int id = int.parse(sid+'');
+//        window.alert("oi0");
+////        print(id);
+//        window.alert("oi1");
+//        this.hero = await _heroService.getHero(id);
+        this.hero = await _heroService.getHero(11);
+        window.alert("oi2");
     }
 
     goBack() {

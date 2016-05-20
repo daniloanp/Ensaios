@@ -17,12 +17,12 @@ import 'package:angular2/router.dart';
 //    providers: const [HeroService]
 )
 class HeroesComponent implements OnInit {
-    String title = 'Tour of Heroes';
-    Hero selectedHero;
+
     Router _router;
 
     final HeroService _heroService;
     List<Hero> heroes;
+    Hero selectedHero;
 
     HeroesComponent(this._heroService);
 
@@ -38,7 +38,7 @@ class HeroesComponent implements OnInit {
         getHeroes();
     }
 
-    gotoDetail(Hero hero){
+    gotoDetail(){
         final link = ['HeroDetail', { 'id': selectedHero}];
         _router.navigate(link);
 
