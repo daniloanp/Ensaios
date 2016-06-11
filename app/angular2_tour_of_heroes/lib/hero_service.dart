@@ -7,7 +7,7 @@ import 'dart:async';
 @Injectable()
 class HeroService {
     Future<List<Hero>> getHeroesSlowly() {
-        return new Future.delayed(const Duration(seconds: 0), () => mockHeroes);
+        return new Future.delayed(const Duration(seconds: 2), () => mockHeroes);
     }
 
     Future<List<Hero>> getHeroes() async => mockHeroes;

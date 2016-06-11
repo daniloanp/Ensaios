@@ -3,6 +3,7 @@ import 'package:angular2_tour_of_heroes/hero.dart';
 import 'hero_detail_component.dart';
 import 'package:angular2_tour_of_heroes/hero_service.dart';
 import 'package:angular2/router.dart';
+import 'dart:async';
 // #docregion hero-class-1
 
 
@@ -17,31 +18,28 @@ import 'package:angular2/router.dart';
 //    providers: const [HeroService]
 )
 class HeroesComponent implements OnInit {
-
-    Router _router;
-
+    final Router _router;
     final HeroService _heroService;
     List<Hero> heroes;
     Hero selectedHero;
 
-    HeroesComponent(this._heroService);
+    HeroesComponent(this._heroService, this._router);
 
     onSelect(Hero hero) {
         selectedHero = hero;
     }
 
-    getHeroes() async {
+    Future getHeroes() async {
         heroes = await _heroService.getHeroes();
     }
 
-    ngOnInit() {
+    void ngOnInit() {
         getHeroes();
     }
 
-    gotoDetail(){
-        final link = ['HeroDetail', { 'id': selectedHero}];
+    Future gotoDetail(){
+        final link = ['HeroDetail', { 'id': selectedHero.id.toString()}];
         _router.navigate(link);
-
     }
 
 }

@@ -19,7 +19,7 @@ CREATE TABLE operation (
     -- table columns with their constraints
     id        BIGSERIAL,
     name      VARCHAR(255), -- TODO:CHECK_IF_IS_URL_SAFE
-    module_id BIGINT,
+    module_id BIGINT NOT NULL,
     -- table constraints
     UNIQUE (module_id, name),
      PRIMARY KEY (id),
@@ -56,7 +56,7 @@ CREATE TABLE "role" (
      FOREIGN KEY (parent_role_id) REFERENCES "role" (id)
 );
 
-CREATE TABLE role_permission_mapping (
+CREATE TABLE permission_role_mapping (
     -- table columns with their constraints
     permission_id BIGINT NOT NULL,
     role_id       BIGINT NOT NULL,

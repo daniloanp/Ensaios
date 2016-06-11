@@ -4,7 +4,7 @@
         <span class="badge">{{hero.id}}</span> {{hero.name}}
     </li>
 </ul>
-<div *ngIf="selectedHero">
+<div *ngIf="selectedHero != null">
     <h2>
         {{selectedHero.name | uppercase}} is my hero
     </h2>

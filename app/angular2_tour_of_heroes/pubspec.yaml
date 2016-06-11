@@ -13,7 +13,5 @@ transformers:
       - 'package:angular2/common.dart#COMMON_DIRECTIVES'
     platform_pipes:
       - 'package:angular2/common.dart#COMMON_PIPES'
-    platform_providers:
-      - 'package:angular2/common.dart#COMMON_PROVIDERS'
     entry_points: web/main.dart
 - dart_to_js_script_rewriter

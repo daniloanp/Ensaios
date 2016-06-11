@@ -1,7 +1,7 @@
 import 'package:angular2/core.dart';
+import 'package:angular2/router.dart';
 import 'package:angular2_tour_of_heroes/hero_service.dart';
 import 'package:angular2_tour_of_heroes/heroes_component.dart';
-import 'package:angular2/router.dart';
 import 'package:angular2_tour_of_heroes/dashboard_component.dart';
 import 'package:angular2_tour_of_heroes/hero_detail_component.dart';
 
@@ -18,7 +18,7 @@ import 'package:angular2_tour_of_heroes/hero_detail_component.dart';
     directives: const [
         ROUTER_DIRECTIVES,
     ],
-    providers: const [ROUTER_PROVIDERS, HeroService],
+    providers: const [HeroService, ROUTER_PROVIDERS],
     styleUrls: const ['app_component.css']
 )
 @RouteConfig(const [

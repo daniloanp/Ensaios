@@ -10,22 +10,15 @@ import 'dart:html' show window;
     styleUrls: const ['hero_detail_component.css']
 )
 class HeroDetailComponent implements OnInit {
-    HeroService _heroService;
-    RouteParams _routeParams;
+    Hero hero;
+    final HeroService _heroService;
+    final RouteParams _routeParams;
 
     HeroDetailComponent(this._heroService, this._routeParams);
-    Hero hero;
 
-    @override
     ngOnInit() async {
-        String sid = _routeParams.get('id');
-//        int id = int.parse(sid+'');
-//        window.alert("oi0");
-////        print(id);
-//        window.alert("oi1");
-//        this.hero = await _heroService.getHero(id);
-        this.hero = await _heroService.getHero(11);
-        window.alert("oi2");
+        var id = int.parse(_routeParams.get('id'));
+        this.hero = await (_heroService.getHero(id));
     }
 
     goBack() {
