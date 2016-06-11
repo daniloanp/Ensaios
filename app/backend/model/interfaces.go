@@ -2,11 +2,18 @@ package model
 
 import (
 	"database/sql"
+	"time"
 )
 type UserAccountData struct {
 	ID int64
 	Username string
-	RegistrationDateTime sql.
+	RegistrationDateTime time.Time
+}
+
+type UserAccount interface {
+	Create(userAccountData *UserAccountData) error
+	GetByUsername(username string) (error, *UserAccountData)
+	GetByUserId(id int64) (error, *UserAccountData)
 
 }
 
@@ -21,12 +28,6 @@ type Module interface {
 	GetByID(id uint64) (error, *ModuleData)
 	DeleteByID(id uint64) error
 	Update(ModuleData *ModuleData) error
-}
-
-type ModuleData struct {
-	ID int64
-	Name string
-	ParentModuleID sql.NullInt64
 }
 
 
