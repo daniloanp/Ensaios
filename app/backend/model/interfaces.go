@@ -4,22 +4,72 @@ import (
 	"database/sql"
 	"time"
 )
+
 type UserAccountData struct {
-	ID int64
-	Username string
+	ID                   int64
+	Username             string
 	RegistrationDateTime time.Time
 }
 
 type UserAccount interface {
 	Create(userAccountData *UserAccountData) error
 	GetByUsername(username string) (error, *UserAccountData)
-	GetByUserId(id int64) (error, *UserAccountData)
+	GetByID(id int64) (error, *UserAccountData)
+	DeleteByID(id int64) error
+	Update(userAccountData *UserAccountData) error
+}
 
+type UserPasswordData struct {
+	ID                   int64
+	UserAccountID        int64
+	Password             string
+	Salt                 string
+	RegistrationDateTime time.Time
+}
+
+type UserPassword interface {
+	Create(userPasswordData *UserPasswordData) error
+	Update(userPasswordData *UserPasswordData) error
+	DeleteByID(id int64) error
+	GetByID(id int64) (error, *UserPasswordData)
+}
+
+
+type UserEmailData struct {
+	UserAccountId        int64
+	Address              string
+	Verified             bool
+	RegistrationDateTime time.Time
+}
+
+type UserEmail interface {
+	Create(userEmailData *UserEmailData) error
+	Update(userEmailData  *UserEmailData) error
+	DeleteByAddress(address string) error
+	GetByAddress(address string) (error, *UserEmailData)
+}
+
+type UserPersonalInformationData struct {
+	ID                   int64
+	UserAccountID        int64
+	GivenName            string
+	LastName             string
+	MotherName           string
+	FatherName           string
+	Nationality          string
+	RegistrationDatetime time.Time
+}
+
+type UserPersonalInformation interface {
+	Create(userPersonalInformation *UserPersonalInformation) error
+	Update(userPersonalInformation  *UserPersonalInformation) error
+	DeleteById(id int64) error
+	GetById(id int64) (error, *UserPersonalInformation)
 }
 
 type ModuleData struct {
-	ID int64
-	Name string
+	ID             int64
+	Name           string
 	ParentModuleID sql.NullInt64
 }
 
@@ -30,10 +80,9 @@ type Module interface {
 	Update(ModuleData *ModuleData) error
 }
 
-
 type OperationData struct {
-	ID int64
-	Name string
+	ID       int64
+	Name     string
 	ModuleID int64
 }
 
@@ -45,7 +94,7 @@ type Operation interface {
 }
 
 type PermissionData struct {
-	ID int64
+	ID          int64
 	Description string
 }
 
@@ -56,20 +105,18 @@ type Permission interface {
 	Update(permissionData *PermissionData) error
 }
 
-
 type RoleData struct {
-	ID int64
-	Description    string
+	ID           int64
+	Description  string
 	ParentRoleID sql.NullInt64
 }
 
 type Role interface {
-	Create (roleData *RoleData) error
+	Create(roleData *RoleData) error
 	GetByID(id int64) (error, *RoleData)
 	DeleteByID(id int64) error
 	Update(roleData *RoleData) error
 }
-
 
 type OperationPermissionManager interface {
 	SetPermissionOperations(permissionID int64, operationIDs []int64) error
@@ -78,7 +125,6 @@ type OperationPermissionManager interface {
 	GetOperationPermissions(operationID int64) (error, []*PermissionData)
 	GetPermissionOperations(permissionID int64) (error, []*OperationData)
 }
-
 
 type PermissionRoleManager interface {
 	SetRolePermissions(roleID int64, permissionsIDs []int64) error

@@ -53,7 +53,7 @@ CREATE TABLE user_personal_information (
     FOREIGN KEY (user_account_id) REFERENCES user_account (id)
 );
 
-CREATE TABLE user_current_emails (
+CREATE TABLE user_current_email ( -- several
     user_account_id    BIGINT NOT NULL,
     user_email_address VARCHAR(254),
     FOREIGN KEY (user_account_id) REFERENCES user_account (id),
