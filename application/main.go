@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/daniloanp/Ensaios/app/backend/server"
+	"github.com/daniloanp/Ensaios/application/backend/server"
 	"net/http"
 )
 
