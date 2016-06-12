@@ -11,7 +11,6 @@ type UserAccount interface {
 }
 
 
-
 type UserPassword interface {
 	Create(userPasswordData *UserPasswordData) error
 	Update(userPasswordData *UserPasswordData) error
