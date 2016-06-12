@@ -10,6 +10,7 @@ CREATE TABLE module (
     parent_module_id BIGINT,
     -- table constraints
     CHECK (parent_module_id != id),
+    CHECK(name == '' OR parent_module_id != null),
     UNIQUE (parent_module_id, name),
      PRIMARY KEY (id),
      FOREIGN KEY (parent_module_id) REFERENCES module (id)

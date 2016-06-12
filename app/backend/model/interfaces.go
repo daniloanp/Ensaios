@@ -1,15 +1,6 @@
 package model
 
-import (
-	"database/sql"
-	"time"
-)
 
-type UserAccountData struct {
-	ID                   int64
-	Username             string
-	RegistrationDateTime time.Time
-}
 
 type UserAccount interface {
 	Create(userAccountData *UserAccountData) error
@@ -19,13 +10,7 @@ type UserAccount interface {
 	Update(userAccountData *UserAccountData) error
 }
 
-type UserPasswordData struct {
-	ID                   int64
-	UserAccountID        int64
-	Password             string
-	Salt                 string
-	RegistrationDateTime time.Time
-}
+
 
 type UserPassword interface {
 	Create(userPasswordData *UserPasswordData) error
@@ -35,12 +20,6 @@ type UserPassword interface {
 }
 
 
-type UserEmailData struct {
-	UserAccountId        int64
-	Address              string
-	Verified             bool
-	RegistrationDateTime time.Time
-}
 
 type UserEmail interface {
 	Create(userEmailData *UserEmailData) error
@@ -49,16 +28,7 @@ type UserEmail interface {
 	GetByAddress(address string) (error, *UserEmailData)
 }
 
-type UserPersonalInformationData struct {
-	ID                   int64
-	UserAccountID        int64
-	GivenName            string
-	LastName             string
-	MotherName           string
-	FatherName           string
-	Nationality          string
-	RegistrationDatetime time.Time
-}
+
 
 type UserPersonalInformation interface {
 	Create(userPersonalInformation *UserPersonalInformation) error
@@ -67,11 +37,6 @@ type UserPersonalInformation interface {
 	GetById(id int64) (error, *UserPersonalInformation)
 }
 
-type ModuleData struct {
-	ID             int64
-	Name           string
-	ParentModuleID sql.NullInt64
-}
 
 type Module interface {
 	Create(moduleData *ModuleData) error //missing model data
@@ -80,11 +45,7 @@ type Module interface {
 	Update(ModuleData *ModuleData) error
 }
 
-type OperationData struct {
-	ID       int64
-	Name     string
-	ModuleID int64
-}
+
 
 type Operation interface {
 	Create(operationData *OperationData) error
@@ -93,10 +54,7 @@ type Operation interface {
 	Update(OperationData *OperationData) error
 }
 
-type PermissionData struct {
-	ID          int64
-	Description string
-}
+
 
 type Permission interface {
 	Create(permissionData *PermissionData) error
@@ -105,11 +63,7 @@ type Permission interface {
 	Update(permissionData *PermissionData) error
 }
 
-type RoleData struct {
-	ID           int64
-	Description  string
-	ParentRoleID sql.NullInt64
-}
+
 
 type Role interface {
 	Create(roleData *RoleData) error
@@ -133,5 +87,7 @@ type PermissionRoleManager interface {
 	GetPermissionRoles(permissionID int64) (error, []*RoleData)
 	GetRolePermissions(roleID int64) (error, []*PermissionData)
 }
+
+
 
 
