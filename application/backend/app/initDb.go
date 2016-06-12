@@ -1,11 +1,11 @@
-package application
+package app
 
 import (
 	"github.com/daniloanp/Ensaios/application/backend/model"
 )
 
 var (
-	db model.DbMap = nil
+	db *model.DbMap = nil
 )
 
 const (
@@ -18,4 +18,16 @@ func throwPanic(err error) {
 	if err != nil {
 		panic(ErrorOnInitDb)
 	}
+}
+
+
+func getDb() *model.DbMap {
+	return nil // TODO:missing databse implementation
+}
+
+func Db() *model.DbMap {
+	if db == nil {
+		db = getDb()
+	}
+	return db
 }

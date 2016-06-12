@@ -3,11 +3,16 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 pushd $SCRIPT_DIR
 
-pushd app
+pushd application
     pushd frontend
-    pub build
+        pub build
     popd
     go build
-    ./app
+    rm -rf dist/*
+    mv application dist/ensaios
+    cp -r frontend/build/web dist/web
+    pushd ./dist
+        ./ensaios
+    popd
 popd
 

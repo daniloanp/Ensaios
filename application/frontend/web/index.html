@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-
-<!--
-  Copyright (c) 2016, <your name>. All rights reserved. Use of this source code
-  is governed by a BSD-style license that can be found in the LICENSE file.
--->
-
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="scaffolded-by" content="https://github.com/google/stagehand">
-    <title>frontend</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <script defer src="/static/js/main.dart" type="application/dart"></script>
+  <!-- #docregion head -->
+  <!-- #docregion base-href -->
+  <head>
+    <base href="/">   <!-- For testing using pub serve directly -->
+    <!-- base href="/dart/web/" --> <!-- For testing in WebStorm -->
+    <!-- #enddocregion base-href -->
+    <title>Angular 2 Tour of Heroes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- #enddocregion head -->
+    <!-- #docregion css -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- #enddocregion css -->
+    <!-- #docregion head -->
+    <script defer src="static/main.dart" type="application/dart"></script>
     <script defer src="packages/browser/dart.js"></script>
-</head>
-
-<body>
-  <div id="output"></div>
-
-</body>
+  </head>
+  <!-- #enddocregion head -->
+  <body>
+    <my-app>Loading...</my-app>
+  </body>
 </html>

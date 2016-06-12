@@ -1,4 +1,4 @@
-package application
+package main
 
 import (
 	"github.com/daniloanp/Ensaios/application/backend/server"

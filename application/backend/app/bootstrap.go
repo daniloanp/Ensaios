@@ -1,12 +1,18 @@
-package application
+package app
 
-import "github.com/daniloanp/Ensaios/application/backend/model"
+import (
+	"github.com/daniloanp/Ensaios/application/backend/model"
+	"database/sql"
+)
 
 func createAdminModule (baseModuleID int64) {
 	var err error
 	var adminModule = &model.ModuleData{
 		Name:"admin",
-		ParentModuleID:baseModuleID,
+		ParentModuleID: sql.NullInt64{
+			Int64: baseModuleID,
+			Valid: true,
+		},
 	}
 	err = db.Module.Create(adminModule)
 	throwPanic(err)
