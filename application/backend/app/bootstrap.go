@@ -5,12 +5,88 @@ import (
 	"database/sql"
 )
 
+//(map[string][]string)
+var adminSubModules = map[string][]string{
+	"users": {
+		"listing",
+		"create",
+		"read",
+		"update",
+	},
+	"modules": {
+		"listing",
+		"create",
+		"read",
+		"update",
+		"delete",
+		"create-operation",
+		"delete-operation",
+		"update-operation",
+	},
+	"permissions": {
+		"listing",
+		"read",
+		"update",
+		"create",
+		"delete",
+		"add-operation",
+		"remove-operation",
+		"add-module",
+		"remove-module",
+	},
+	"roles" : {
+		"listing",
+		"read",
+		"update",
+		"create",
+		"delete",
+		"add-permission",
+	},
+}
 
+
+
+func createModule(moduleName string, parentID int64) *model.ModuleData {
+	var err error
+	var module = &model.ModuleData{
+		Name:moduleName,
+		ParentModuleID: sql.NullInt64{
+			Int64: parentID,
+			Valid: true,
+		},
+	}
+
+	err = db.Module.Create(module)
+	throwPanic(err)
+
+	return module
+}
+
+func createOperations(moduleID int64, operationNames []string) []*model.OperationData {
+	var err error
+	var operationsSlice = make([]*model.OperationData, 0, len(operationNames))
+	for _, name := range operationNames {
+		var operation = &model.OperationData{
+			Name: name,
+			ModuleID: moduleID,
+		}
+		err = db.Operation.Create(operation)
+		throwPanic(err)
+
+		operationsSlice = append(operationsSlice, operation)
+	}
+	return operationsSlice
+}
 
 func createAdminModule (baseModuleID int64) {
+	type module struct {
+		Module *model.ModuleData
+		Operations []*model.OperationData
+	}
 	var err error
+
 	var adminModule = &model.ModuleData{
-		Name:"_admin",
+		Name: "_admin",
 		ParentModuleID: sql.NullInt64{
 			Int64: baseModuleID,
 			Valid: true,
@@ -19,16 +95,20 @@ func createAdminModule (baseModuleID int64) {
 	err = db.Module.Create(adminModule)
 	throwPanic(err)
 
-	var usersModule = &model.ModuleData{
-		Name:"users",
-		ParentModuleID: sql.NullInt64{
-			Int64: adminModule.ID,
-			Valid: true,
-		},
+	var subModules = make(map[string]*module, len(adminSubModules))
+
+	for moduleName, operations := range adminSubModules {
+		var m = &module{}
+		m.Module = createModule(moduleName, adminModule.ID)
+		m.Operations = createOperations(
+			m.Module.ID,
+			operations,
+		)
+		subModules[moduleName] = m
 	}
 
-	err = db.Module.Create(usersModule)
-	throwPanic(err)
+
+
 
 	var operationsModule = &model.ModuleData {
 		Name:"operations",
