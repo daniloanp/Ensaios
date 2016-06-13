@@ -5,10 +5,12 @@ import (
 	"database/sql"
 )
 
+
+
 func createAdminModule (baseModuleID int64) {
 	var err error
 	var adminModule = &model.ModuleData{
-		Name:"admin",
+		Name:"_admin",
 		ParentModuleID: sql.NullInt64{
 			Int64: baseModuleID,
 			Valid: true,
@@ -16,7 +18,52 @@ func createAdminModule (baseModuleID int64) {
 	}
 	err = db.Module.Create(adminModule)
 	throwPanic(err)
+
+	var usersModule = &model.ModuleData{
+		Name:"users",
+		ParentModuleID: sql.NullInt64{
+			Int64: adminModule.ID,
+			Valid: true,
+		},
+	}
+
+	err = db.Module.Create(usersModule)
+	throwPanic(err)
+
+	var operationsModule = &model.ModuleData {
+		Name:"operations",
+		ParentModuleID: sql.NullInt64{
+			Int64: adminModule.ID,
+			Valid: true,
+		},
+	}
+
+	err = db.Module.Create(operationsModule)
+	throwPanic(err)
+
+	var permissionsModule = &model.ModuleData {
+		Name: "permissions",
+		ParentModuleID: sql.NullInt64{
+			Int64: adminModule.ID,
+			Valid: true,
+		},
+	}
+	err = db.Module.Create(permissionsModule)
+	throwPanic(err)
+
+	var rolesModule = &model.ModuleData {
+		Name: "roles",
+		ParentModuleID: sql.NullInt64{
+			Int64: adminModule.ID,
+			Valid: true,
+		},
+	}
+
+	err = db.Module.Create(rolesModule)
+	throwPanic(err)
 }
+
+
 
 func createBaseModule () *model.ModuleData {
 	var err error

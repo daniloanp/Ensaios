@@ -18,8 +18,6 @@ type UserPassword interface {
 	GetByID(id int64) (error, *UserPasswordData)
 }
 
-
-
 type UserEmail interface {
 	Create(userEmailData *UserEmailData) error
 	Update(userEmailData  *UserEmailData) error
@@ -69,6 +67,7 @@ type Role interface {
 	GetByID(id int64) (error, *RoleData)
 	DeleteByID(id int64) error
 	Update(roleData *RoleData) error
+	HasPermission(roleData *RoleData, operationPath string) (error, bool) // TODO:Maybe we should not tell when a op exists
 }
 
 type OperationPermissionManager interface {
@@ -86,7 +85,6 @@ type PermissionRoleManager interface {
 	GetPermissionRoles(permissionID int64) (error, []*RoleData)
 	GetRolePermissions(roleID int64) (error, []*PermissionData)
 }
-
 
 
 

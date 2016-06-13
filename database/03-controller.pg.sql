@@ -53,8 +53,8 @@ CREATE TABLE "role" (
     parent_role_id BIGINT,
     -- table constraints
     CHECK (parent_role_id != id),
-     PRIMARY KEY (id),
-     FOREIGN KEY (parent_role_id) REFERENCES "role" (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (parent_role_id) REFERENCES "role" (id)
 );
 
 CREATE TABLE permission_role_mapping (
