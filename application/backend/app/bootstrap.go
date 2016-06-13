@@ -5,6 +5,11 @@ import (
 	"database/sql"
 )
 
+type module struct {
+	Module *model.ModuleData
+	Operations []*model.OperationData
+}
+
 //(map[string][]string)
 var adminSubModules = map[string][]string{
 	"users": {
@@ -78,11 +83,7 @@ func createOperations(moduleID int64, operationNames []string) []*model.Operatio
 	return operationsSlice
 }
 
-func createAdminModule (baseModuleID int64) {
-	type module struct {
-		Module *model.ModuleData
-		Operations []*model.OperationData
-	}
+func createAdminModule (baseModuleID int64) (*model.ModuleData, map[string]*module) {
 	var err error
 
 	var adminModule = &model.ModuleData{
@@ -105,42 +106,11 @@ func createAdminModule (baseModuleID int64) {
 			operations,
 		)
 		subModules[moduleName] = m
+		createOperations(m.Module.ID, operations)
 	}
 
+	return adminModule, subModules
 
-
-
-	var operationsModule = &model.ModuleData {
-		Name:"operations",
-		ParentModuleID: sql.NullInt64{
-			Int64: adminModule.ID,
-			Valid: true,
-		},
-	}
-
-	err = db.Module.Create(operationsModule)
-	throwPanic(err)
-
-	var permissionsModule = &model.ModuleData {
-		Name: "permissions",
-		ParentModuleID: sql.NullInt64{
-			Int64: adminModule.ID,
-			Valid: true,
-		},
-	}
-	err = db.Module.Create(permissionsModule)
-	throwPanic(err)
-
-	var rolesModule = &model.ModuleData {
-		Name: "roles",
-		ParentModuleID: sql.NullInt64{
-			Int64: adminModule.ID,
-			Valid: true,
-		},
-	}
-
-	err = db.Module.Create(rolesModule)
-	throwPanic(err)
 }
 
 
@@ -172,8 +142,28 @@ func createBaseModule () *model.ModuleData {
 	return baseModule;
 }
 
+func createPermissionForAdmin(adminModuleData *model.ModuleData, subModules map[string]*module) {
+	var err error
+	//TODO:This should be reactored to splitt_up_permissions
+	var adminPermission = &model.PermissionData{
+		Description: "Full administration Permission",
+	}
+	err = db.Operation.Create(adminPermission)
+	throwPanic(err)
+
+
+	for _, module := range subModules {
+		operationIds := make([]int64, 0, len(module.Operations))
+		for operation := range module.Operations {
+			operationIds = append(operationIds, operation)
+		}
+		db.OperationPermissionManager.SetPermissionOperations(adminPermission.ID)
+	}
+}
+
 
 func Bootstrap() {
 	baseModule := createBaseModule()
-	createAdminModule(baseModule.ID)
+	adminModuleData, subModules := createAdminModule(baseModule.ID)
+	createPermissionForAdmin(adminModuleData, subModules)
 }
