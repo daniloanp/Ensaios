@@ -148,16 +148,16 @@ func createPermissionForAdmin(adminModuleData *model.ModuleData, subModules map[
 	var adminPermission = &model.PermissionData{
 		Description: "Full administration Permission",
 	}
-	err = db.Operation.Create(adminPermission)
+	err = db.Permission.Create(adminPermission)
 	throwPanic(err)
 
 
 	for _, module := range subModules {
 		operationIds := make([]int64, 0, len(module.Operations))
-		for operation := range module.Operations {
-			operationIds = append(operationIds, operation)
+		for _, operation := range module.Operations {
+			operationIds = append(operationIds, operation.ID)
 		}
-		db.OperationPermissionManager.SetPermissionOperations(adminPermission.ID)
+		db.OperationPermissionManager.SetPermissionOperations(adminPermission.ID, operationIds)
 	}
 }
 
