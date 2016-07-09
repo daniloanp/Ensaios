@@ -1,18 +1,17 @@
 package main
 
 import (
-	"github.com/daniloanp/Ensaios/application/backend/server"
-	"net/http"
 	"flag"
-	"github.com/daniloanp/Ensaios/application/backend/bootstrap"
-)
+	"net/http"
 
+	"github.com/daniloanp/Ensaios/application/backend/bootstrap"
+	"github.com/daniloanp/Ensaios/application/backend/server"
+)
 
 var (
-
-	flags struct{bootstrap bool}
-
+	flags struct{ bootstrap bool }
 )
+
 func main() {
 	flag.BoolVar(&flags.bootstrap, "do-bootstrap", false, "")
 	flag.Parse()
