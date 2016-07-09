@@ -11,7 +11,6 @@ type (
 		Username             string
 		RegistrationDateTime time.Time
 	}
-
 	UserPasswordData struct {
 		ID                   int64
 		UserAccountID        int64
@@ -19,14 +18,12 @@ type (
 		Salt                 string
 		RegistrationDateTime time.Time
 	}
-
 	UserEmailData struct {
 		UserAccountId        int64
 		Address              string
 		Verified             bool
 		RegistrationDateTime time.Time
 	}
-
 	UserPersonalInformationData struct {
 		ID                   int64
 		UserAccountID        int64
@@ -43,18 +40,15 @@ type (
 		Name           string
 		ParentModuleID sql.NullInt64
 	}
-
 	OperationData struct {
 		ID       int64
 		Name     string
 		ModuleID int64
 	}
-
 	PermissionData struct {
 		ID          int64
 		Description string
 	}
-
 	RoleData struct {
 		ID           int64
 		Description  string
