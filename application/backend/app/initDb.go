@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/daniloanp/Ensaios/application/backend/model"
-	"github.com/daniloanp/Ensaios/application/backend/modelpgsql"
+	"github.com/daniloanp/Ensaios/application/backend/model/pgsql"
 )
 
 var (
@@ -23,7 +23,7 @@ func panicOnError(err error) {
 
 
 func getDb() model.DbMap {
-	return modelpgsql.Instance()
+	return pgsql.Instance()
 }
 
 func Db() model.DbMap {

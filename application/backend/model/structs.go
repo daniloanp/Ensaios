@@ -34,7 +34,6 @@ type (
 		Nationality          string
 		RegistrationDatetime time.Time
 	}
-
 	ModuleData struct {
 		ID             int64
 		Name           string
