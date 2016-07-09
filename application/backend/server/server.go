@@ -29,8 +29,6 @@ func handleIndex(w http.ResponseWriter, r *http.Request, s *session.Session) {
 	}
 }
 
-
-
 func BackendHandler() http.Handler {
 	mux := mux.NewRouter()
 	handleStaticServer(mux)

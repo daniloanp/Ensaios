@@ -30,7 +30,7 @@ func GetSessionData(w http.ResponseWriter,   r *http.Request) *Session {
 		return nil
 	}
 	if session.IsNew {
-		_, role := app.Db().Role.GetByID(app.AnonymousRole); //TODO:Ignoring Error
+		_, role := app.Db().Role().GetByID(app.AnonymousRole); //TODO:Ignoring Error
 		mySession = &Session{
 			Session: session,
 			User: nil,

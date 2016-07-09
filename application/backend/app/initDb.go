@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	db *model.DbMap = nil
+	db model.DbMap = nil
 )
 
 const (
@@ -14,18 +14,18 @@ const (
 	AdminRole = int64(0)
 )
 
-func throwPanic(err error) {
+func panicOnError(err error) {
 	if err != nil {
 		panic(ErrorOnInitDb)
 	}
 }
 
 
-func getDb() *model.DbMap {
+func getDb() model.DbMap {
 	return nil // TODO:missing databse implementation
 }
 
-func Db() *model.DbMap {
+func Db() model.DbMap {
 	if db == nil {
 		db = getDb()
 	}
