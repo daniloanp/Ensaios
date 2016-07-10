@@ -33,7 +33,7 @@ type(
 		Create(moduleData *ModuleData) error //missing model data
 		GetByID(id int64) (*ModuleData, error)
 		DeleteByID(id int64) error
-		Update(ModuleData *ModuleData) error
+		Update(moduleData *ModuleData) error
 	}
 	Operation interface {
 		Create(operationData *OperationData) error

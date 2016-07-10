@@ -9,11 +9,14 @@ CREATE TABLE module (
     name             VARCHAR(255) NOT NULL, -- TODO:CHECK_IF_IS_URL_SAFE
     parent_module_id BIGINT,
     -- table constraints
+    CHECK(parent_module_id > 0),
+    CHECK(name::text ~ '^[a-z0-9][a-z0-9]*$'),
     CHECK (parent_module_id != id),
-    CHECK(name == '' OR parent_module_id != null),
+    CHECK(name = '' OR parent_module_id != null),
+    CHECK((select count(id) from "module" m where name = m.name) as A )
     UNIQUE (parent_module_id, name),
-     PRIMARY KEY (id),
-     FOREIGN KEY (parent_module_id) REFERENCES module (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (parent_module_id) REFERENCES module (id)
 );
 
 CREATE TABLE operation (
@@ -23,8 +26,8 @@ CREATE TABLE operation (
     module_id BIGINT NOT NULL,
     -- table constraints
     UNIQUE (module_id, name),
-     PRIMARY KEY (id),
-     FOREIGN KEY (module_id) REFERENCES module (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (module_id) REFERENCES module (id)
 );
 
 CREATE TABLE permission (
