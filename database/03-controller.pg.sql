@@ -9,11 +9,10 @@ CREATE TABLE module (
     name             VARCHAR(255) NOT NULL, -- TODO:CHECK_IF_IS_URL_SAFE
     parent_module_id BIGINT,
     -- table constraints
-    CHECK(parent_module_id > 0),
-    CHECK(name::text ~ '^[a-z0-9][a-z0-9]*$'),
+    CHECK (id > 0),
+    CHECK(name::text ~ '^([a-z0-9][a-z0-9\\-]*|)$'),
     CHECK (parent_module_id != id),
-    CHECK(name = '' OR parent_module_id != null),
-    CHECK((select count(id) from "module" m where name = m.name) as A )
+    CHECK(name = '' OR parent_module_id is distinct from null),
     UNIQUE (parent_module_id, name),
     PRIMARY KEY (id),
     FOREIGN KEY (parent_module_id) REFERENCES module (id)
