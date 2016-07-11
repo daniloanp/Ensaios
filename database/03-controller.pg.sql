@@ -13,7 +13,7 @@ CREATE TABLE module (
     CONSTRAINT chk_module_name_rule CHECK(name::text ~ '^([a-z0-9][a-z0-9\\-]*|)$'),
     CONSTRAINT chk_module_no_circular_parent CHECK (parent_module_id != id),
     CONSTRAINT chk_module_needs_parent CHECK(name = '' OR parent_module_id is distinct from null),
-    CONSTRAINT uq_module_parent_name UNIQUE (parent_module_id, name),
+    CONSTRAINT uq_parent_module_name UNIQUE (parent_module_id, name),
     CONSTRAINT pk_module PRIMARY KEY (id),
     CONSTRAINT fk_module_parent_module FOREIGN KEY (parent_module_id) REFERENCES module (id)
 );
@@ -24,9 +24,10 @@ CREATE TABLE operation (
     name      VARCHAR(255), -- TODO:CHECK_IF_IS_URL_SAFE
     module_id BIGINT NOT NULL,
     -- table constraints
-    UNIQUE (module_id, name),
-    PRIMARY KEY (id),
-    FOREIGN KEY (module_id) REFERENCES module (id)
+    CONSTRAINT chk_operation_name_rule CHECK(name::text ~ '^([a-z0-9][a-z0-9\\-]*|)$'),
+    CONSTRAINT uq_module_name UNIQUE (module_id, name),
+    CONSTRAINT pk_operation PRIMARY KEY (id),
+    CONSTRAINT fk_module FOREIGN KEY (module_id) REFERENCES module (id)
 );
 
 CREATE TABLE permission (
