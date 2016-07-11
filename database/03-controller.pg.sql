@@ -9,13 +9,13 @@ CREATE TABLE module (
     name             VARCHAR(255) NOT NULL, -- TODO:CHECK_IF_IS_URL_SAFE
     parent_module_id BIGINT,
     -- table constraints
-    CHECK (id > 0),
-    CHECK(name::text ~ '^([a-z0-9][a-z0-9\\-]*|)$'),
-    CHECK (parent_module_id != id),
-    CHECK(name = '' OR parent_module_id is distinct from null),
-    UNIQUE (parent_module_id, name),
-    PRIMARY KEY (id),
-    FOREIGN KEY (parent_module_id) REFERENCES module (id)
+    CONSTRAINT chk_module_id_uint CHECK (id > 0),
+    CONSTRAINT chk_module_name_rule CHECK(name::text ~ '^([a-z0-9][a-z0-9\\-]*|)$'),
+    CONSTRAINT chk_module_no_circular_parent CHECK (parent_module_id != id),
+    CONSTRAINT chk_module_needs_parent CHECK(name = '' OR parent_module_id is distinct from null),
+    CONSTRAINT uq_module_parent_name UNIQUE (parent_module_id, name),
+    CONSTRAINT pk_module PRIMARY KEY (id),
+    CONSTRAINT fk_module_parent_module FOREIGN KEY (parent_module_id) REFERENCES module (id)
 );
 
 CREATE TABLE operation (
