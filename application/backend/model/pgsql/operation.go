@@ -3,7 +3,6 @@ package pgsql
 import (
 	"github.com/daniloanp/Ensaios/application/backend/model"
 	"database/sql"
-	"github.com/sosedoff/pgweb/pkg/data"
 )
 
 type operation struct {
