@@ -1,24 +1,26 @@
-package pgsql
+package tables
 
 import (
 	"github.com/daniloanp/Ensaios/application/backend/model"
 	"database/sql"
+	"github.com/daniloanp/Ensaios/application/backend/pgsql/conn"
+	"github.com/daniloanp/Ensaios/application/backend/model/tables"
 )
 
 type module struct {
-	create *sql.Stmt
-	getByID        *sql.Stmt
-	deleteByID     *sql.Stmt
-	update         *sql.Stmt
+	create     *sql.Stmt
+	getByID    *sql.Stmt
+	deleteByID *sql.Stmt
+	update     *sql.Stmt
 }
 
-func (m *module) Create(data *model.ModuleData) (err error) {
+func (m *module) Create(data *tables.ModuleData) (err error) {
 	if data == nil {
 		return model.ErrDataIsNil
 	}
 	if m.create == nil {
 		const insQuery = `INSERT INTO "controller"."module"("name", "parent_module_id") VALUES($1, $2) returning "id"`
-		m.create, err = pgSql.Prepare(insQuery)
+		m.create, err = conn.Db().Prepare(insQuery)
 		if err != nil {
 			return err
 		}
@@ -27,16 +29,16 @@ func (m *module) Create(data *model.ModuleData) (err error) {
 	return row.Scan(&data.ID)
 }
 
-func (m *module) GetByID(id int64) (data *model.ModuleData, err error) {
+func (m *module) GetByID(id int64) (data *tables.ModuleData, err error) {
 	if m.getByID == nil {
 		const selQuery = `SELECT "id", "name", "parent_module_id" FROM "controller"."module" WHERE "id"=$1`
-		m.getByID, err = pgSql.Prepare(selQuery)
+		m.getByID, err = conn.Db().Prepare(selQuery)
 		if err != nil {
 			return nil, err
 		}
 	}
 	row := m.getByID.QueryRow(id)
-	data = new(model.ModuleData)
+	data = new(tables.ModuleData)
 	err = row.Scan(
 		&data.ID,
 		&data.Name,
@@ -51,7 +53,7 @@ func (m *module) GetByID(id int64) (data *model.ModuleData, err error) {
 func (m *module) DeleteByID(id int64) (err error) {
 	if m.deleteByID == nil {
 		const delQuery = `DELETE FROM "controller"."module" WHERE "id"=$1`
-		m.deleteByID, err = pgSql.Prepare(delQuery)
+		m.deleteByID, err = conn.Db().Prepare(delQuery)
 		if err != nil {
 			return err
 		}
@@ -60,10 +62,13 @@ func (m *module) DeleteByID(id int64) (err error) {
 	return err
 }
 
-func (m *module) Update(data *model.ModuleData) (err error) {
+func (m *module) Update(data *tables.ModuleData) (err error) {
+	if data == nil {
+		return model.ErrDataIsNil
+	}
 	if m.update == nil {
 		const uptQuery = `UPDATE "controller"."module" SET "name"=$1, "parent_module_id"=$2 WHERE "id"=$3`
-		m.update, err = pgSql.Prepare(uptQuery)
+		m.update, err = conn.Db().Prepare(uptQuery)
 		if err != nil {
 			return err
 		}

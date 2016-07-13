@@ -1,17 +1,17 @@
 package bootstrap
 
 import (
-	"github.com/daniloanp/Ensaios/application/backend/model"
 	"database/sql"
+	"github.com/daniloanp/Ensaios/application/backend/model/tables"
 )
 
 type (
 	operation struct {
-		model.OperationData
+		tables.OperationData
 		Module *module
 	}
 	module struct {
-		model.ModuleData
+		tables.ModuleData
 		Operations   []*operation
 		ParentModule *module
 	}

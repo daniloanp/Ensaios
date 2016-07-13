@@ -1,4 +1,4 @@
-package pgsql
+package tables
 
 import "github.com/daniloanp/Ensaios/application/backend/model"
 

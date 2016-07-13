@@ -1,18 +1,18 @@
 package model
 
-
+import "github.com/daniloanp/Ensaios/application/backend/model/tables"
 
 type Db interface {
-	UserAccount() UserAccount
-	UserPassword() UserPassword
-	UserEmail() UserEmail
-	UserPersonalInformation() UserPersonalInformation
-	Module() Module
-	Operation() Operation
-	Permission() Permission
-	Role() Role
-	OperationPermissionManager() OperationPermissionManager
-	PermissionRoleManager() PermissionRoleManager
+	UserAccount() tables.UserAccount
+	UserPassword() tables.UserPassword
+	UserEmail() tables.UserEmail
+	UserPersonalInformation() tables.UserPersonalInformation
+	Module() tables.Module
+	Operation() tables.Operation
+	Permission() tables.Permission
+	Role() tables.Role
+	//OperationPermissionManager() tables.OperationPermissionManager
+	//PermissionRoleManager() tables.PermissionRoleManager
 }
 
 

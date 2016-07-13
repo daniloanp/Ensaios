@@ -1,4 +1,4 @@
-package model
+package tables
 
 type(
 	UserAccount interface {
@@ -55,22 +55,6 @@ type(
 		DeleteByID(id int64) (err error)
 		Update(data *RoleData) (err error)
 		HasPermission(data *RoleData, operationPath string) (bool, error)
-	}
-
-	OperationPermissionManager interface {
-		SetPermissionOperations(permissionID int64, operationIDs []int64) (err error)
-		AddPermissionOperations(permissionID int64, operationIDs  []int64) (err error)
-		RemovePermissionOperations(permissionID int64, operationIDs  []int64) (err error)
-		GetOperationPermissions(operationID int64) ([]*PermissionData, error)
-		GetPermissionOperations(permissionID int64) ([]*OperationData, error)
-	}
-
-	PermissionRoleManager interface {
-		SetRolePermissions(roleID int64, permissionsIDs []int64) (err error)
-		AddRolePermissions(roleID int64, permissionsIDs []int64) (err error)
-		RemoveRolePermissions(roleID int64, permissionsIDs []int64) (err error)
-		GetPermissionRoles(permissionID int64) ([]*RoleData, error)
-		GetRolePermissions(roleID int64) ([]*PermissionData, error)
 	}
 )
 

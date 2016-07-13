@@ -1,8 +1,10 @@
-package pgsql
+package tables
 
 import (
 	"github.com/daniloanp/Ensaios/application/backend/model"
 	"database/sql"
+	"github.com/daniloanp/Ensaios/application/backend/pgsql/conn"
+	"github.com/daniloanp/Ensaios/application/backend/model/tables"
 )
 
 type operation struct {
@@ -12,13 +14,13 @@ type operation struct {
 	update     *sql.Stmt
 }
 
-func (op *operation) Create(data *model.OperationData) (err error) {
+func (op *operation) Create(data *tables.OperationData) (err error) {
 	if data == nil {
 		return model.ErrDataIsNil
 	}
 	if op.create == nil {
 		const insQuery = `INSERT INTO "controller"."operation"("name", "module_id") VALUES($1, $2) returning "id"`
-		op.create, err = pgSql.Prepare(insQuery)
+		op.create, err = conn.Db().Prepare(insQuery)
 		if err != nil {
 			return err
 		}
@@ -28,16 +30,16 @@ func (op *operation) Create(data *model.OperationData) (err error) {
 	return row.Scan(&data.ID)
 }
 
-func (op *operation) GetByID(id int64) (data *model.OperationData,err  error) {
+func (op *operation) GetByID(id int64) (data *tables.OperationData,err  error) {
 	if op.getByID == nil {
 		const selQuery = `SELECT "id", "name", "module_id" FROM "controller"."operation" WHERE "id"=$1`
-		op.getByID, err = pgSql.Prepare(selQuery)
+		op.getByID, err = conn.Db().Prepare(selQuery)
 		if err != nil {
 			return nil, err
 		}
 	}
 	row := op.getByID.QueryRow(id)
-	data = new(model.ModuleData)
+	data = new(tables.OperationData)
 	err = row.Scan(
 		&data.ID,
 		&data.Name,
@@ -52,7 +54,7 @@ func (op *operation) GetByID(id int64) (data *model.OperationData,err  error) {
 func (op *operation) DeleteByID(id int64) (err error) {
 	if op.deleteByID == nil {
 		const delQuery = `DELETE FROM "controller"."operation" WHERE "id"=$1`
-		op.deleteByID, err = pgSql.Prepare(delQuery)
+		op.deleteByID, err = conn.Db().Prepare(delQuery)
 		if err != nil {
 			return err
 		}
@@ -61,10 +63,13 @@ func (op *operation) DeleteByID(id int64) (err error) {
 	return err
 }
 
-func (op *operation) Update(data *model.OperationData) (err error) {
+func (op *operation) Update(data *tables.OperationData) (err error) {
+	if data == nil {
+		return model.ErrDataIsNil
+	}
 	if op.update == nil {
 		const uptQuery = `UPDATE "controller"."operation" SET "name"=$1, "module_id"=$2 WHERE "id"=$3`
-		op.update, err = pgSql.Prepare(uptQuery)
+		op.update, err = conn.Db().Prepare(uptQuery)
 		if err != nil {
 			return err
 		}

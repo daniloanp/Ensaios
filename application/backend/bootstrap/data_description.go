@@ -1,93 +1,91 @@
 package bootstrap
 
-import "github.com/daniloanp/Ensaios/application/backend/model"
-
-
-//(map[string][]string)
+import (
+	"github.com/daniloanp/Ensaios/application/backend/model/tables"
+)
 
 type module__ struct {
-	Module *model.ModuleData
+	Module *tables.ModuleData
 }
 
 var (
 	baseModule = &module{
-		ModuleData: model.ModuleData{Name: "/"},
+		ModuleData: tables.ModuleData{Name: "/"},
 		Operations:[]*operation{
-			{model.OperationData{Name: ""}, nil}, // base OP, TODO:Recheck
-			{model.OperationData{Name: "_login"}, nil},
+			{tables.OperationData{Name: ""}, nil}, // base OP, TODO:Recheck
+			{tables.OperationData{Name: "_login"}, nil},
 		},
-
 	}
 	adminModule = &module{
 		ParentModule: baseModule,
-		ModuleData: model.ModuleData{Name: "admin"},
+		ModuleData: tables.ModuleData{Name: "admin"},
 		Operations:nil,
 
 	}
 	adminSubModules = []*module{
 		{
 			ParentModule: adminModule,
-			ModuleData: model.ModuleData{Name: "users"},
+			ModuleData: tables.ModuleData{Name: "users"},
 			Operations:[]*operation{
-				{model.OperationData{Name: "listing"}, nil},
-				{model.OperationData{Name: "create"}, nil},
-				{model.OperationData{Name: "read"}, nil},
-				{model.OperationData{Name: "update"}, nil},
+				{tables.OperationData{Name: "listing"}, nil},
+				{tables.OperationData{Name: "create"}, nil},
+				{tables.OperationData{Name: "read"}, nil},
+				{tables.OperationData{Name: "update"}, nil},
 			},
 		},
 		{
 			ParentModule: adminModule,
-			ModuleData: model.ModuleData{Name: "modules"},
+			ModuleData: tables.ModuleData{Name: "modules"},
 			Operations:[]*operation{
-				{model.OperationData{Name: "listing"}, nil},
-				{model.OperationData{Name: "create"}, nil},
-				{model.OperationData{Name: "read"}, nil},
-				{model.OperationData{Name: "update"}, nil},
-				{model.OperationData{Name: "delete"}, nil},
-				{model.OperationData{Name: "create-operation"}, nil},
-				{model.OperationData{Name: "delete-operation"}, nil},
-				{model.OperationData{Name: "update-operation"}, nil},
+				{tables.OperationData{Name: "listing"}, nil},
+				{tables.OperationData{Name: "create"}, nil},
+				{tables.OperationData{Name: "read"}, nil},
+				{tables.OperationData{Name: "update"}, nil},
+				{tables.OperationData{Name: "delete"}, nil},
+				{tables.OperationData{Name: "create-operation"}, nil},
+				{tables.OperationData{Name: "delete-operation"}, nil},
+				{tables.OperationData{Name: "update-operation"}, nil},
 			},
 		},
 		{
 			ParentModule: adminModule,
-			ModuleData: model.ModuleData{Name: "modules"},
+			ModuleData: tables.ModuleData{Name: "modules"},
 			Operations:[]*operation{
-				{model.OperationData{Name: "listing"}, nil},
-				{model.OperationData{Name: "create"}, nil},
-				{model.OperationData{Name: "read"}, nil},
-				{model.OperationData{Name: "update"}, nil},
-				{model.OperationData{Name: "delete"}, nil},
-				{model.OperationData{Name: "create-operation"}, nil},
-				{model.OperationData{Name: "delete-operation"}, nil},
-				{model.OperationData{Name: "update-operation"}, nil},
+				{tables.OperationData{Name: "listing"}, nil},
+				{tables.OperationData{Name: "create"}, nil},
+				{tables.OperationData{Name: "read"}, nil},
+				{tables.OperationData{Name: "update"}, nil},
+				{tables.OperationData{Name: "delete"}, nil},
+				{tables.OperationData{Name: "create-operation"}, nil},
+				{tables.OperationData{Name: "delete-operation"}, nil},
+				{tables.OperationData{Name: "update-operation"}, nil},
 			},
 		},
 		{
 			ParentModule: adminModule,
-			ModuleData: model.ModuleData{Name: "permissions"},
+			ModuleData: tables.ModuleData{Name: "permissions"},
 			Operations:[]*operation{
-				{model.OperationData{Name: "listing"}, nil},
-				{model.OperationData{Name: "create"}, nil},
-				{model.OperationData{Name: "read"}, nil},
-				{model.OperationData{Name: "update"}, nil},
-				{model.OperationData{Name: "delete"}, nil},
-				{model.OperationData{Name: "add-operation"}, nil},
-				{model.OperationData{Name: "remove-operation"}, nil},
-				{model.OperationData{Name: "add-module"}, nil},
-				{model.OperationData{Name: "remove-module"}, nil},
+				{tables.OperationData{Name: "listing"}, nil},
+				{tables.OperationData{Name: "create"}, nil},
+				{tables.OperationData{Name: "read"}, nil},
+				{tables.OperationData{Name: "update"}, nil},
+				{tables.OperationData{Name: "delete"}, nil},
+				{tables.OperationData{Name: "add-operation"}, nil},
+				{tables.OperationData{Name: "remove-operation"}, nil},
+				{tables.OperationData{Name: "add-module"}, nil},
+				{tables.OperationData{Name: "remove-module"}, nil},
 			},
 		},
 		{
 			ParentModule: adminModule,
-			ModuleData: model.ModuleData{Name: "roles"},
+			ModuleData: tables.ModuleData{Name: "roles"},
 			Operations:[]*operation{
-				{model.OperationData{Name: "listing"}, nil},
-				{model.OperationData{Name: "create"}, nil},
-				{model.OperationData{Name: "read"}, nil},
-				{model.OperationData{Name: "update"}, nil},
-				{model.OperationData{Name: "delete"}, nil},
-				{model.OperationData{Name: "add-permission"}, nil},
+				{tables.OperationData{Name: "listing"}, nil},
+				{tables.OperationData{Name: "create"}, nil},
+				{tables.OperationData{Name: "read"}, nil},
+				{tables.OperationData{Name: "update"}, nil},
+				{tables.OperationData{Name: "delete"}, nil},
+				{tables.OperationData{Name: "add-permission"}, nil},
 			},
 		},
 	}

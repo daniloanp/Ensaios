@@ -2,10 +2,10 @@ package session
 
 import (
 	"github.com/gorilla/sessions"
-	"github.com/daniloanp/Ensaios/application/backend/model"
 	"net/http"
-	"encoding/gob"
+	//"encoding/gob"
 	"github.com/daniloanp/Ensaios/application/backend/app"
+	"github.com/daniloanp/Ensaios/application/backend/model/tables"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -18,8 +18,8 @@ const (
 )
 type Session struct {
 	*sessions.Session
-	User *model.UserAccount // maybe not
-	Role *model.RoleData // maybe not
+	User *tables.UserAccountData // maybe not
+	Role *tables.RoleData // maybe not
 }
 
 func GetSessionData(w http.ResponseWriter,   r *http.Request) *Session {
@@ -52,5 +52,5 @@ func GetSessionData(w http.ResponseWriter,   r *http.Request) *Session {
 }
 
 func init() {
-	gob.Register(&Session{})
+	//gob.Register(&Session{})
 }
