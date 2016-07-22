@@ -10,7 +10,7 @@ CREATE TABLE module (
     parent_module_id BIGINT,
     -- table constraints
     CONSTRAINT chk_module_id_uint CHECK (id > 0),
-    CONSTRAINT chk_module_name_rule CHECK(name::text ~ '^([a-z0-9][a-z0-9\\-]*|)$'),
+    CONSTRAINT chk_module_name_rule CHECK(name::text ~ '^[a-z0-9][a-z0-9\\-]*$'),
     CONSTRAINT chk_module_no_circular_parent CHECK (parent_module_id != id),
     CONSTRAINT chk_module_needs_parent CHECK(name = '' OR parent_module_id is distinct from null),
     CONSTRAINT uq_parent_module_name UNIQUE (parent_module_id, name),

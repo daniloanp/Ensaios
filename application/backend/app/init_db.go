@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	db model.Db = nil
+	db model.Tb = nil
 )
 
 const (
@@ -22,11 +22,11 @@ func panicOnError(err error) {
 }
 
 
-func getDb() model.Db {
+func getDb() model.Tb {
 	return tables.Instance()
 }
 
-func Db() model.Db {
+func Db() model.Tb {
 	if db == nil {
 		db = getDb()
 	}

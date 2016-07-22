@@ -2,7 +2,7 @@ package model
 
 import "github.com/daniloanp/Ensaios/application/backend/model/tables"
 
-type Db interface {
+type Tb interface {
 	UserAccount() tables.UserAccount
 	UserPassword() tables.UserPassword
 	UserEmail() tables.UserEmail

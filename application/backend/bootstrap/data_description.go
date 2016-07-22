@@ -16,12 +16,13 @@ var (
 			{tables.OperationData{Name: "_login"}, nil},
 		},
 	}
+
 	adminModule = &module{
 		ParentModule: baseModule,
 		ModuleData: tables.ModuleData{Name: "admin"},
 		Operations:nil,
-
 	}
+
 	adminSubModules = []*module{
 		{
 			ParentModule: adminModule,

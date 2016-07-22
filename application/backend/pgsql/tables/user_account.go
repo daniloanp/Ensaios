@@ -7,12 +7,12 @@ import (
 	"github.com/daniloanp/Ensaios/application/backend/model/tables"
 )
 
-type userAccount struct{
-	create     *sql.Stmt
-	getByUsername    *sql.Stmt
-	getById    *sql.Stmt
-	deleteById *sql.Stmt
-	update     *sql.Stmt
+type userAccount struct {
+	create        *sql.Stmt
+	getByUsername *sql.Stmt
+	getById       *sql.Stmt
+	deleteById    *sql.Stmt
+	update        *sql.Stmt
 }
 
 func (ua *userAccount) Create(data *tables.UserAccountData) (err error) {
@@ -32,7 +32,7 @@ func (ua *userAccount) Create(data *tables.UserAccountData) (err error) {
 }
 
 func (ua *userAccount) GetByUsername(username string) (data *tables.UserAccountData, err error) {
-	if ua.getByUsername== nil {
+	if ua.getByUsername == nil {
 		const selQuery = `SELECT "id", "username", "registration_datetime" FROM "users"."user_account" WHERE "username"=$1`
 		ua.getByUsername, err = conn.Db().Prepare(selQuery)
 		if err != nil {

@@ -4,7 +4,7 @@ import "github.com/daniloanp/Ensaios/application/backend/model"
 
 var tbMap *tableMap = nil
 
-func Instance() model.Db {
+func Instance() model.Tb {
 	if tbMap == nil {
 		tbMap = &tableMap{
 			userAccount: new(userAccount),

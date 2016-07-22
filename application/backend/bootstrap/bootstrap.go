@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	db model.Db = app.Db()
+	db model.Tb = app.Db()
 )
 
 func Bootstrap() error {
