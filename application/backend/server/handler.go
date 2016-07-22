@@ -2,7 +2,7 @@ package server
 
 import (
 	"net/http"
-	"github.com/daniloanp/Ensaios/application/backend/session"
+	"github.com/daniloanp/Ensaios/application/backend/server/session"
 	"github.com/daniloanp/Ensaios/application/backend/app"
 )
 

@@ -9,8 +9,8 @@ import (
 
 type module struct {
 	create     *sql.Stmt
-	getByID    *sql.Stmt
-	deleteByID *sql.Stmt
+	getById    *sql.Stmt
+	deleteById *sql.Stmt
 	update     *sql.Stmt
 }
 
@@ -25,24 +25,24 @@ func (m *module) Create(data *tables.ModuleData) (err error) {
 			return err
 		}
 	}
-	row := m.create.QueryRow(data.Name, data.ParentModuleID)
-	return row.Scan(&data.ID)
+	row := m.create.QueryRow(data.Name, data.ParentModuleId)
+	return row.Scan(&data.Id)
 }
 
-func (m *module) GetByID(id int64) (data *tables.ModuleData, err error) {
-	if m.getByID == nil {
+func (m *module) GetById(id int64) (data *tables.ModuleData, err error) {
+	if m.getById == nil {
 		const selQuery = `SELECT "id", "name", "parent_module_id" FROM "controller"."module" WHERE "id"=$1`
-		m.getByID, err = conn.Db().Prepare(selQuery)
+		m.getById, err = conn.Db().Prepare(selQuery)
 		if err != nil {
 			return nil, err
 		}
 	}
-	row := m.getByID.QueryRow(id)
+	row := m.getById.QueryRow(id)
 	data = new(tables.ModuleData)
 	err = row.Scan(
-		&data.ID,
+		&data.Id,
 		&data.Name,
-		&data.ParentModuleID,
+		&data.ParentModuleId,
 	)
 	if err != nil {
 		return nil, err
@@ -50,15 +50,15 @@ func (m *module) GetByID(id int64) (data *tables.ModuleData, err error) {
 	return data, err
 }
 
-func (m *module) DeleteByID(id int64) (err error) {
-	if m.deleteByID == nil {
+func (m *module) DeleteById(id int64) (err error) {
+	if m.deleteById == nil {
 		const delQuery = `DELETE FROM "controller"."module" WHERE "id"=$1`
-		m.deleteByID, err = conn.Db().Prepare(delQuery)
+		m.deleteById, err = conn.Db().Prepare(delQuery)
 		if err != nil {
 			return err
 		}
 	}
-	_, err = m.deleteByID.Exec(id)
+	_, err = m.deleteById.Exec(id)
 	return err
 }
 
@@ -73,7 +73,7 @@ func (m *module) Update(data *tables.ModuleData) (err error) {
 			return err
 		}
 	}
-	_, err = m.update.Exec(data.Name, data.ParentModuleID, data.ID)
+	_, err = m.update.Exec(data.Name, data.ParentModuleId, data.Id)
 	return err
 }
 

@@ -39,19 +39,9 @@ func (d *tableMap) Operation() tables.Operation {
 
 func (d *tableMap) Permission() tables.Permission {
 	return d.permission
-
 }
 
 func (d *tableMap) Role() tables.Role {
 	return d.role
 }
-
-//
-//func (d *tableMap) OperationPermissionManager() tables.OperationPermissionManager {
-//	return d.operationPermissionManager
-//}
-//
-//func (d *tableMap) PermissionRoleManager() tables.PermissionRoleManager {
-//	return d.permissionRoleManager
-//}
 

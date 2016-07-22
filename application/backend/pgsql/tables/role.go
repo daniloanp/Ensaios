@@ -9,8 +9,8 @@ import (
 
 type role struct{
 	create     *sql.Stmt
-	getByID    *sql.Stmt
-	deleteByID *sql.Stmt
+	getById    *sql.Stmt
+	deleteById *sql.Stmt
 	update     *sql.Stmt
 }
 
@@ -26,23 +26,23 @@ func (ro *role) Create(data *tables.RoleData) (err error) {
 		}
 	}
 
-	row := ro.create.QueryRow(data.Description, data.ParentRoleID)
-	return row.Scan(&data.ID)
+	row := ro.create.QueryRow(data.Description, data.ParentRoleId)
+	return row.Scan(&data.Id)
 }
-func (ro *role) GetByID(id int64) (data *tables.RoleData, err error) {
-	if ro.getByID == nil {
+func (ro *role) GetById(id int64) (data *tables.RoleData, err error) {
+	if ro.getById == nil {
 		const selQuery = `SELECT "id", "description", "parent_role_id" FROM "controller"."role" WHERE "id"=$1`
-		ro.getByID, err = conn.Db().Prepare(selQuery)
+		ro.getById, err = conn.Db().Prepare(selQuery)
 		if err != nil {
 			return nil, err
 		}
 	}
-	row := ro.getByID.QueryRow(id)
+	row := ro.getById.QueryRow(id)
 	data = new(tables.RoleData)
 	err = row.Scan(
-		&data.ID,
+		&data.Id,
 		&data.Description,
-		&data.ParentRoleID,
+		&data.ParentRoleId,
 	)
 	if err != nil {
 		return nil, err
@@ -50,15 +50,15 @@ func (ro *role) GetByID(id int64) (data *tables.RoleData, err error) {
 
 	return data, err
 }
-func (ro *role) DeleteByID(id int64) (err error) {
-	if ro.deleteByID == nil {
+func (ro *role) DeleteById(id int64) (err error) {
+	if ro.deleteById == nil {
 		const delQuery = `DELETE FROM "controller"."role" WHERE "id"=$1`
-		ro.deleteByID, err = conn.Db().Prepare(delQuery)
+		ro.deleteById, err = conn.Db().Prepare(delQuery)
 		if err != nil {
 			return err
 		}
 	}
-	_, err = ro.deleteByID.Exec(id)
+	_, err = ro.deleteById.Exec(id)
 	return err
 }
 
@@ -73,7 +73,7 @@ func (ro *role) Update(data *tables.RoleData) (err error) {
 			return err
 		}
 	}
-	_, err = ro.update.Exec(data.Description, data.ParentRoleID, data.ID)
+	_, err = ro.update.Exec(data.Description, data.ParentRoleId, data.Id)
 	return err
 }
 

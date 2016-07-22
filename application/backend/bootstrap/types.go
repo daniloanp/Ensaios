@@ -24,11 +24,12 @@ func (op *operation) insert() error {
 
 func (mod *module) insert() error {
 	if mod.ParentModule != nil {
-		mod.ParentModuleID = sql.NullInt64{
+		mod.ParentModuleId = sql.NullInt64{
 			Valid: true,
-			Int64:mod.ParentModule.ID,
+			Int64:mod.ParentModule.Id,
 		}
 	}
+
 	if err := db.Module().Create(&mod.ModuleData); err != nil {
 		return err
 	}
@@ -36,7 +37,7 @@ func (mod *module) insert() error {
 	if mod.Operations != nil {
 		for _, op := range mod.Operations {
 			op.Module = mod
-			op.ModuleID = mod.ID
+			op.ModuleId = mod.Id
 			if err := op.insert(); err != nil {
 				return err
 			}

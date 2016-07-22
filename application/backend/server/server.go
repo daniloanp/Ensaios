@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"github.com/gorilla/mux"
-	"github.com/daniloanp/Ensaios/application/backend/session"
+	"github.com/daniloanp/Ensaios/application/backend/server/session"
 )
 
 

@@ -11,8 +11,6 @@ type Db interface {
 	Operation() tables.Operation
 	Permission() tables.Permission
 	Role() tables.Role
-	//OperationPermissionManager() tables.OperationPermissionManager
-	//PermissionRoleManager() tables.PermissionRoleManager
 }
 
 

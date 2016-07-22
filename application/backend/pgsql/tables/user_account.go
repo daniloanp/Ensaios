@@ -10,8 +10,8 @@ import (
 type userAccount struct{
 	create     *sql.Stmt
 	getByUsername    *sql.Stmt
-	getByID    *sql.Stmt
-	deleteByID *sql.Stmt
+	getById    *sql.Stmt
+	deleteById *sql.Stmt
 	update     *sql.Stmt
 }
 
@@ -28,7 +28,7 @@ func (ua *userAccount) Create(data *tables.UserAccountData) (err error) {
 	}
 
 	row := ua.create.QueryRow(data.Username)
-	return row.Scan(&data.ID)
+	return row.Scan(&data.Id)
 }
 
 func (ua *userAccount) GetByUsername(username string) (data *tables.UserAccountData, err error) {
@@ -39,10 +39,10 @@ func (ua *userAccount) GetByUsername(username string) (data *tables.UserAccountD
 			return nil, err
 		}
 	}
-	row := ua.getByID.QueryRow(username)
+	row := ua.getById.QueryRow(username)
 	data = new(tables.UserAccountData)
 	err = row.Scan(
-		&data.ID,
+		&data.Id,
 		&data.Username,
 		&data.RegistrationDateTime,
 	)
@@ -53,18 +53,18 @@ func (ua *userAccount) GetByUsername(username string) (data *tables.UserAccountD
 	return
 }
 
-func (ua *userAccount) GetByID(id int64) (data *tables.UserAccountData, err error) {
-	if ua.getByID == nil {
+func (ua *userAccount) GetById(id int64) (data *tables.UserAccountData, err error) {
+	if ua.getById == nil {
 		const selQuery = `SELECT "id", "username", "registration_datetime" FROM "users"."user_account" WHERE "id"=$1`
-		ua.getByID, err = conn.Db().Prepare(selQuery)
+		ua.getById, err = conn.Db().Prepare(selQuery)
 		if err != nil {
 			return nil, err
 		}
 	}
-	row := ua.getByID.QueryRow(id)
+	row := ua.getById.QueryRow(id)
 	data = new(tables.UserAccountData)
 	err = row.Scan(
-		&data.ID,
+		&data.Id,
 		&data.Username,
 		&data.RegistrationDateTime,
 	)
@@ -74,15 +74,15 @@ func (ua *userAccount) GetByID(id int64) (data *tables.UserAccountData, err erro
 	return
 }
 
-func (ua *userAccount) DeleteByID(id int64) (err error) {
-	if ua.deleteByID == nil {
+func (ua *userAccount) DeleteById(id int64) (err error) {
+	if ua.deleteById == nil {
 		const delQuery = `DELETE FROM "users"."user_account" WHERE "id"=$1`
-		ua.deleteByID, err = conn.Db().Prepare(delQuery)
+		ua.deleteById, err = conn.Db().Prepare(delQuery)
 		if err != nil {
 			return err
 		}
 	}
-	_, err = ua.deleteByID.Exec(id)
+	_, err = ua.deleteById.Exec(id)
 	return err
 }
 

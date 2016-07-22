@@ -86,7 +86,7 @@ package test
 //				if parent.in == nil {
 //					t.Fatal("Can't recover: you wrote your test bad")
 //				} else {
-//					cs.in.ParentModuleID = sql.NullInt64{Int64:parent.in.ID, Valid: true}
+//					cs.in.ParentModuleID = sql.NullInt64{Int64:parent.in.Id, Valid: true}
 //				}
 //			}
 //		}
@@ -106,14 +106,14 @@ package test
 //			t.Errorf(logPadding + "Failed: Some error was expected!")
 //		} else {
 //			// since we pass a reference, the function can change the content of model
-//			if out.ID == in.ID {
+//			if out.Id == in.Id {
 //				//A call to create always insert a new line
-//				t.Errorf(logPadding + "Same id (int64:%d) returned, expecting a different one", in.ID)
+//				t.Errorf(logPadding + "Same id (int64:%d) returned, expecting a different one", in.Id)
 //				t.Compare(&in, out)
 //			}
 //
 //			//now, get from db and test retrieved objects
-//			retrivied, err := t.GetByID(out.ID)
+//			retrivied, err := t.GetByID(out.Id)
 //			if err != nil && retrivied != nil {
 //
 //			}
@@ -122,7 +122,7 @@ package test
 //				t.Errorf(logPadding + "Get failed when created are supposed to worked!")
 //			} else {
 //				t.Compare(out, retrivied)
-//				if out.ID != retrivied.ID {
+//				if out.Id != retrivied.Id {
 //					t.Errorf(logPadding + "Ids differing from original!")
 //				}
 //			}
@@ -137,8 +137,8 @@ package test
 //	if in.ParentModuleID != out.ParentModuleID {
 //		t.Errorf(logPadding +  "The resulted parent_id is diferent from the expected one. %d = %d ", in.ParentModuleID, out.ParentModuleID)
 //	}
-//	if out.ID <= 0 {
-//		t.Errorf(logPadding + "An invalid ID was returned. id == %d", out.ID)
+//	if out.Id <= 0 {
+//		t.Errorf(logPadding + "An invalid Id was returned. id == %d", out.Id)
 //	}
 //}
 //

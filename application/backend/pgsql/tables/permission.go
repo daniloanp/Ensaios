@@ -9,8 +9,8 @@ import (
 
 type permission struct{
 	create     *sql.Stmt
-	getByID    *sql.Stmt
-	deleteByID *sql.Stmt
+	getById    *sql.Stmt
+	deleteById *sql.Stmt
 	update     *sql.Stmt
 }
 
@@ -27,21 +27,21 @@ func (per *permission) Create(data *tables.PermissionData) (err error) {
 	}
 
 	row := per.create.QueryRow(data.Description)
-	return row.Scan(&data.ID)
+	return row.Scan(&data.Id)
 }
 
-func (per *permission) GetByID(id int64) (data *tables.PermissionData, err error) {
-	if per.getByID == nil {
+func (per *permission) GetById(id int64) (data *tables.PermissionData, err error) {
+	if per.getById == nil {
 		const selQuery = `SELECT "id", "description" FROM "controller"."permission" WHERE "id"=$1`
-		per.getByID, err = conn.Db().Prepare(selQuery)
+		per.getById, err = conn.Db().Prepare(selQuery)
 		if err != nil {
 			return nil, err
 		}
 	}
-	row := per.getByID.QueryRow(id)
+	row := per.getById.QueryRow(id)
 	data = new(tables.PermissionData)
 	err = row.Scan(
-		&data.ID,
+		&data.Id,
 		&data.Description,
 	)
 	if err != nil {
@@ -50,15 +50,15 @@ func (per *permission) GetByID(id int64) (data *tables.PermissionData, err error
 	return data, err
 }
 
-func (per *permission) DeleteByID(id int64) (err error) {
-	if per.deleteByID == nil {
+func (per *permission) DeleteById(id int64) (err error) {
+	if per.deleteById == nil {
 		const delQuery = `DELETE FROM "controller"."permission" WHERE "id"=$1`
-		per.deleteByID, err = conn.Db().Prepare(delQuery)
+		per.deleteById, err = conn.Db().Prepare(delQuery)
 		if err != nil {
 			return err
 		}
 	}
-	_, err = per.deleteByID.Exec(id)
+	_, err = per.deleteById.Exec(id)
 	return err
 }
 
@@ -73,6 +73,6 @@ func (per *permission) Update(data *tables.PermissionData) (err error) {
 			return err
 		}
 	}
-	_, err = per.update.Exec(data.Description, data.ID)
+	_, err = per.update.Exec(data.Description, data.Id)
 	return err
 }

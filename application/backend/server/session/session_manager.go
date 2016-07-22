@@ -6,6 +6,7 @@ import (
 	//"encoding/gob"
 	"github.com/daniloanp/Ensaios/application/backend/app"
 	"github.com/daniloanp/Ensaios/application/backend/model/tables"
+	"encoding/gob"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -30,7 +31,7 @@ func GetSessionData(w http.ResponseWriter,   r *http.Request) *Session {
 		return nil
 	}
 	if session.IsNew {
-		role, _ := app.Db().Role().GetByID(app.AnonymousRole); //TODO:Ignoring Error
+		role, _ := app.Db().Role().GetById(app.AnonymousRole); //TODO:Ignoring Error
 		mySession = &Session{
 			Session: session,
 			User: nil,
@@ -52,5 +53,5 @@ func GetSessionData(w http.ResponseWriter,   r *http.Request) *Session {
 }
 
 func init() {
-	//gob.Register(&Session{})
+	gob.Register(&Session{})
 }

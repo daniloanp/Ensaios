@@ -9,8 +9,8 @@ import (
 
 type operation struct {
 	create     *sql.Stmt
-	getByID    *sql.Stmt
-	deleteByID *sql.Stmt
+	getById    *sql.Stmt
+	deleteById *sql.Stmt
 	update     *sql.Stmt
 }
 
@@ -26,24 +26,24 @@ func (op *operation) Create(data *tables.OperationData) (err error) {
 		}
 	}
 
-	row := op.create.QueryRow(data.Name, data.ModuleID)
-	return row.Scan(&data.ID)
+	row := op.create.QueryRow(data.Name, data.ModuleId)
+	return row.Scan(&data.Id)
 }
 
-func (op *operation) GetByID(id int64) (data *tables.OperationData,err  error) {
-	if op.getByID == nil {
+func (op *operation) GetById(id int64) (data *tables.OperationData,err  error) {
+	if op.getById == nil {
 		const selQuery = `SELECT "id", "name", "module_id" FROM "controller"."operation" WHERE "id"=$1`
-		op.getByID, err = conn.Db().Prepare(selQuery)
+		op.getById, err = conn.Db().Prepare(selQuery)
 		if err != nil {
 			return nil, err
 		}
 	}
-	row := op.getByID.QueryRow(id)
+	row := op.getById.QueryRow(id)
 	data = new(tables.OperationData)
 	err = row.Scan(
-		&data.ID,
+		&data.Id,
 		&data.Name,
-		&data.ModuleID,
+		&data.ModuleId,
 	)
 	if err != nil {
 		return nil, err
@@ -51,15 +51,15 @@ func (op *operation) GetByID(id int64) (data *tables.OperationData,err  error) {
 	return data, err
 }
 
-func (op *operation) DeleteByID(id int64) (err error) {
-	if op.deleteByID == nil {
+func (op *operation) DeleteById(id int64) (err error) {
+	if op.deleteById == nil {
 		const delQuery = `DELETE FROM "controller"."operation" WHERE "id"=$1`
-		op.deleteByID, err = conn.Db().Prepare(delQuery)
+		op.deleteById, err = conn.Db().Prepare(delQuery)
 		if err != nil {
 			return err
 		}
 	}
-	_, err = op.deleteByID.Exec(id)
+	_, err = op.deleteById.Exec(id)
 	return err
 }
 
@@ -74,6 +74,6 @@ func (op *operation) Update(data *tables.OperationData) (err error) {
 			return err
 		}
 	}
-	_, err = op.update.Exec(data.Name, data.ModuleID, data.ID)
+	_, err = op.update.Exec(data.Name, data.ModuleId, data.Id)
 	return err
 }
