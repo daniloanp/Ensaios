@@ -3,28 +3,28 @@
 
 SET search_path TO content;
 
-CREATE TABLE public_profile (
+CREATE TABLE profile (
     id                      BIGSERIAL                   NOT NULL,
     registration_datetime   TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     creator_user_account_id BIGINT                      NOT NULL, -- user who created the node.
     -- table constraints
-    PRIMARY KEY (id),
-    FOREIGN KEY (creator_user_account_id) REFERENCES users.user_account (id)
+    CONSTRAINT pk_profile PRIMARY KEY (id),
+    CONSTRAINT fk_profile__user_account FOREIGN KEY (creator_user_account_id) REFERENCES users.user_account (id)
 );
 
-CREATE TABLE public_profile_administrator (
-    public_profile_id             BIGINT NOT NULL,
-    administrator_user_account_id BIGINT NOT NULL,
+CREATE TABLE profile_admin (-- is a N-N table
+    profile_id     BIGINT NOT NULL,
+    admin_user_account_id BIGINT NOT NULL,
     -- table constraints
-    PRIMARY KEY (public_profile_id, administrator_user_account_id),
-    FOREIGN KEY (public_profile_id) REFERENCES public_profile (id),
-    FOREIGN KEY (administrator_user_account_id) REFERENCES users.user_account (id)
+    CONSTRAINT pk_profile_admin PRIMARY KEY (profile_id, admin_user_account_id),
+    CONSTRAINT fk_profile_admin__profile FOREIGN KEY (profile_id) REFERENCES profile (id),
+    CONSTRAINT fk_profile_admin__user_account FOREIGN KEY (admin_user_account_id) REFERENCES users.user_account (id)
 );
 
-CREATE TABLE public_profile_revision (
+CREATE TABLE profile_revision (
     -- table columns with their constraints
     id                      BIGSERIAL,
-    public_profile_id       BIGINT                      NOT NULL,
+    profile_id       BIGINT                      NOT NULL,
     name                    TEXT                        NOT NULL,
     location                TEXT                                 DEFAULT NULL,
     short_description       VARCHAR(255)                         DEFAULT NULL,
@@ -33,18 +33,18 @@ CREATE TABLE public_profile_revision (
     registration_datetime   TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     creator_user_account_id BIGINT                      NOT NULL, -- user who created the node.
     -- table constraints
-    FOREIGN KEY (public_profile_id) REFERENCES public_profile (id),
-    PRIMARY KEY (id)
+    CONSTRAINT pk_profile_revision PRIMARY KEY (id),
+    CONSTRAINT fk_profile_revision__profile FOREIGN KEY (profile_id) REFERENCES profile (id)
 );
 
-CREATE TABLE public_profile_current_revision (
-    public_profile_revision_id BIGINT NOT NULL,
-    public_profile_id          BIGINT NOT NULL,
+CREATE TABLE profile_current_revision (
+    profile_revision_id BIGINT NOT NULL,
+    profile_id          BIGINT NOT NULL,
     -- table constraints
-    UNIQUE (public_profile_id, public_profile_revision_id), -- just one current revision;
-    UNIQUE (public_profile_revision_id), -- just one current revision;
-    FOREIGN KEY (public_profile_id) REFERENCES public_profile (id),
-    FOREIGN KEY (public_profile_revision_id) REFERENCES public_profile_revision (id)
+    CONSTRAINT uq_profile_current_revision__profile_id__profile_revision_id UNIQUE (profile_id, profile_revision_id), -- just one current revision;
+    CONSTRAINT uq_profile_current_revision__profile_revision_id UNIQUE (profile_revision_id), -- just one current revision;
+    CONSTRAINT fk_profile_current_revision__profile FOREIGN KEY (profile_id) REFERENCES profile (id),
+    CONSTRAINT fk_profile_current_revision__profile_revision FOREIGN KEY (profile_revision_id) REFERENCES profile_revision (id)
 );
 
 
@@ -54,16 +54,16 @@ CREATE TABLE content_set (
     registration_datetime   TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     creator_user_account_id BIGINT                      NOT NULL, -- user who created the node.
     -- table constraints
-    PRIMARY KEY (id)
+    CONSTRAINT pk_content_set PRIMARY KEY (id)
 );
 
-CREATE TABLE content_set_administrator (
+CREATE TABLE content_set_admin (
     user_account_id BIGINT NOT NULL,
     content_set_id  BIGINT NOT NULL,
     -- table constraints
-    PRIMARY KEY (user_account_id, content_set_id),
-    FOREIGN KEY (user_account_id) REFERENCES users.user_account (id),
-    FOREIGN KEY (content_set_id) REFERENCES content_set (id)
+    CONSTRAINT pk_content_set_admin PRIMARY KEY (user_account_id, content_set_id),
+    CONSTRAINT fk_content_set_admin__user_account FOREIGN KEY (user_account_id) REFERENCES users.user_account (id),
+    CONSTRAINT fk_content_set_admin__content_set FOREIGN KEY (content_set_id) REFERENCES content_set (id)
 );
 
 CREATE TABLE content (
@@ -72,9 +72,9 @@ CREATE TABLE content (
     registration_datetime   TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     creator_user_account_id BIGINT                      NOT NULL, -- user who created the node.
     -- table constraints
-    FOREIGN KEY (creator_user_account_id) REFERENCES users.user_account (id),
-    FOREIGN KEY (content_set_id) REFERENCES content_set (id),
-    PRIMARY KEY (id)
+    CONSTRAINT pk_content PRIMARY KEY (id),
+    CONSTRAINT fk_content__user_account FOREIGN KEY (creator_user_account_id) REFERENCES users.user_account (id),
+    CONSTRAINT fk_content__content_set FOREIGN KEY (content_set_id) REFERENCES content_set (id)
 );
 
 CREATE TABLE content_revision (
@@ -88,35 +88,35 @@ CREATE TABLE content_revision (
     registration_datetime   TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     creator_user_account_id BIGINT                      NOT NULL, -- user who created the node.
     -- table constraints
-    PRIMARY KEY (id),
-    FOREIGN KEY (creator_user_account_id) REFERENCES users.user_account (id),
-    FOREIGN KEY (content_id) REFERENCES content (id)
+    CONSTRAINT pk_content_revision PRIMARY KEY (id),
+    CONSTRAINT fk_content_revision__user_account FOREIGN KEY (creator_user_account_id) REFERENCES users.user_account (id),
+    CONSTRAINT fk_content_revision__content FOREIGN KEY (content_id) REFERENCES content (id)
 );
 
 CREATE TABLE content_current_revision (
     content_id          BIGINT NOT NULL,
     content_revision_id BIGINT NOT NULL,
     -- table constraints
-    UNIQUE (content_id), -- just one content;
-    PRIMARY KEY (content_id, content_revision_id),
-    FOREIGN KEY (content_revision_id) REFERENCES content_revision (id),
-    FOREIGN KEY (content_id) REFERENCES content (id)
+    CONSTRAINT pk_content_current_revision PRIMARY KEY (content_id, content_revision_id),
+    CONSTRAINT uq_content_current_revision__content_id UNIQUE (content_id), -- just one content;
+    CONSTRAINT fk_content_current_revision__content_revision FOREIGN KEY (content_revision_id) REFERENCES content_revision (id),
+    CONSTRAINT fk_content_current_revision__content FOREIGN KEY (content_id) REFERENCES content (id)
 );
 
-CREATE TABLE content_revision_author_mapping (-- authors
+CREATE TABLE content_revision_v_profile (-- authors
     content_revision_id BIGINT NOT NULL,
-    public_profile_id   BIGINT NOT NULL,
+    profile_id   BIGINT NOT NULL,
     -- table constraints
-    PRIMARY KEY (content_revision_id, public_profile_id),
-    FOREIGN KEY (content_revision_id) REFERENCES content_revision (id),
-    FOREIGN KEY (public_profile_id) REFERENCES public_profile (id)
+    CONSTRAINT pk_content_revision_v_profile PRIMARY KEY (content_revision_id, profile_id),
+    CONSTRAINT fk_content_revision_v_profile__content_revision FOREIGN KEY (content_revision_id) REFERENCES content_revision (id),
+    CONSTRAINT fk_content_revision_v_profile__profile FOREIGN KEY (profile_id) REFERENCES profile (id)
 );
 
 CREATE TABLE form (
     id    BIGSERIAL,
     title TEXT NOT NULL,
     -- table constraints
-    PRIMARY KEY (id)
+    CONSTRAINT form_pk PRIMARY KEY (id)
 );
 
 CREATE TYPE form_field_input_type AS ENUM ('combobox', 'radiolist', 'checkbox', 'date', 'datetime', 'textfield', 'textarea');
@@ -128,8 +128,8 @@ CREATE TABLE form_field (
     mask       TEXT    DEFAULT NULL,
     options    TEXT [] DEFAULT NULL, -- should be a
     -- table constraints
-    PRIMARY KEY (id),
-    FOREIGN KEY (form_id) REFERENCES form (id)
+    CONSTRAINT pk_form_field PRIMARY KEY (id),
+    CONSTRAINT fk_form_field__form FOREIGN KEY (form_id) REFERENCES form (id)
 );
 
 CREATE TABLE pool (
@@ -139,8 +139,8 @@ CREATE TABLE pool (
     registration_datetime   TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     creator_user_account_id BIGINT                      NOT NULL, -- user who created the node.
     -- table constraints
-    PRIMARY KEY (id),
-    FOREIGN KEY (content_set_id) REFERENCES content_set (id)
+    CONSTRAINT pk_pool PRIMARY KEY (id),
+    CONSTRAINT fk_pool__content_set FOREIGN KEY (content_set_id) REFERENCES content_set (id)
 );
 
 CREATE TABLE pool_step (
@@ -150,9 +150,9 @@ CREATE TABLE pool_step (
     form_id               BIGINT NOT NULL,
     previous_pool_step_id BIGINT DEFAULT NULL,
     -- table constraints
-    CHECK (id != previous_pool_step_id),
-    PRIMARY KEY (id),
-    UNIQUE (id, pool_id),
+    CONSTRAINT pk_pool_step PRIMARY KEY (id),
+    CONSTRAINT ck_pool_step_id__neq__previous_pool_step_id CHECK (id != previous_pool_step_id),
+    CONSTRAINT uq_pool_step_id__pool_id UNIQUE (id, pool_id),
     UNIQUE (pool_id, previous_pool_step_id),
     UNIQUE (pool_id, form_id),
     FOREIGN KEY (form_id) REFERENCES form (id),
@@ -281,22 +281,22 @@ CREATE TABLE comment_section (
 
 CREATE TABLE comment (
     id                       BIGSERIAL NOT NULL,
-    author_public_profile_id BIGINT    NOT NULL,
+    author_profile_id BIGINT    NOT NULL,
     comment_section_id       BIGINT DEFAULT NULL,
     parent_comment_id        BIGINT DEFAULT NULL,
     -- table constraints
     PRIMARY KEY (id),
-    FOREIGN KEY (author_public_profile_id) REFERENCES public_profile (id),
+    FOREIGN KEY (author_profile_id) REFERENCES profile (id),
     FOREIGN KEY (comment_section_id) REFERENCES comment_section (id),
     FOREIGN KEY (parent_comment_id) REFERENCES comment_section (id)
 );
 
 CREATE TABLE page_view_comment_section_mapping (
     comment_section_id BIGINT DEFAULT NULL,
-    page_view_id BIGINT NOT NULL,
+    page_view_id       BIGINT NOT NULL,
     --table constraints
     PRIMARY KEY (comment_section_id, page_view_id),
-    FOREIGN KEY (comment_section_id) REFERENCES comment_section(id),
+    FOREIGN KEY (comment_section_id) REFERENCES comment_section (id),
     FOREIGN KEY (page_view_id) REFERENCES page_view (id)
 
 );

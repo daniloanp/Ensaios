@@ -9,7 +9,7 @@ CREATE TABLE nickname (
     registration_datetime TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     -- table constraints
     CONSTRAINT pk_nickname PRIMARY KEY (id),
-    CONSTRAINT chk_nickname__name__rule CHECK (name :: TEXT ~ '^[a-z][a-z0-9\\-_.]*$' AND length(name) >= 3),
+    CONSTRAINT ck_nickname__name__rule CHECK (name :: TEXT ~ '^[a-z][a-z0-9\\-_.]*$' AND length(name) >= 3),
     CONSTRAINT uq_nickname__name UNIQUE (name)
 );
 
@@ -63,9 +63,9 @@ CREATE TABLE user_email (
     verified              BOOLEAN                              DEFAULT FALSE,
     registration_datetime TIMESTAMP(2) WITH TIME ZONE NOT NULL DEFAULT current_timestamp(2),
     -- table constraints
+    CONSTRAINT pk_user_email PRIMARY KEY (user_account_id, email_id),
     CONSTRAINT fk_user_email__email FOREIGN KEY (email_id) REFERENCES email (id),
-    CONSTRAINT fk_user_email__user_account FOREIGN KEY (user_account_id) REFERENCES user_account (id),
-    CONSTRAINT pk_user_email PRIMARY KEY (user_account_id, email_id)
+    CONSTRAINT fk_user_email__user_account FOREIGN KEY (user_account_id) REFERENCES user_account (id)
 );
 
 CREATE TABLE user_personal_information (
@@ -97,8 +97,8 @@ CREATE TABLE user_current_nickname (
     nickname_id      BIGINT NOT NULL,
     user_account_id  BIGINT NOT NULL,
     CONSTRAINT pk_user_current_nickname PRIMARY KEY (user_nickname_id),
-    UNIQUE (user_account_id),
-    UNIQUE (nickname_id),
+    CONSTRAINT uq_user_current_nickname__account_id UNIQUE (user_account_id),
+    CONSTRAINT uq_nickname_id UNIQUE (nickname_id),
     CONSTRAINT fk_user_current_nickname__user_nickname FOREIGN KEY (user_nickname_id, nickname_id, user_account_id) REFERENCES user_nickname (id, nickname_id, user_account_id)
 );
 -- table defines wich user_account is the current information;
@@ -107,9 +107,9 @@ CREATE TABLE user_current_information (
     user_account_id              BIGINT NOT NULL,
     user_password_id             BIGINT DEFAULT NULL,
     user_personal_information_id BIGINT DEFAULT NULL, -- table constraints
-    PRIMARY KEY (user_account_id),
-    UNIQUE (user_personal_information_id),
-    FOREIGN KEY (user_account_id) REFERENCES user_account (id),
-    FOREIGN KEY (user_personal_information_id, user_account_id) REFERENCES user_personal_information (id, user_account_id),
-    FOREIGN KEY (user_password_id, user_account_id) REFERENCES user_password (id, user_account_id)
+    CONSTRAINT pk_user_current_information PRIMARY KEY (user_account_id),
+    CONSTRAINT uq_user_current_information UNIQUE (user_personal_information_id),
+    CONSTRAINT fk_user_current_information__user_account FOREIGN KEY (user_account_id) REFERENCES user_account (id),
+    CONSTRAINT fk_user_current_information__user_personal_information FOREIGN KEY (user_personal_information_id, user_account_id) REFERENCES user_personal_information (id, user_account_id),
+    CONSTRAINT fk_user_current_information__user_password FOREIGN KEY (user_password_id, user_account_id) REFERENCES user_password (id, user_account_id)
 );
