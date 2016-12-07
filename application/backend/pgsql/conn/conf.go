@@ -25,7 +25,7 @@ type Configuration struct {
 
 var configuration *Configuration = nil
 
-//SetConfiguration, you should not change configuration more than once
+//SetConfiguration...
 func SetConfiguration(c *Configuration) error {
 	if configuration != nil {
 		return errors.New("You should not change configuration more than once")
@@ -119,8 +119,6 @@ func (c *Configuration) loadDefaults() error {
 	}
 	return nil
 }
-
-
 
 //* dbname - The name of the database to connect to
 //* user - The user to sign in as

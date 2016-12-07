@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"time"
 )
-//There
+
 type (
 	UserAccountData struct {
 		Id                   int64
